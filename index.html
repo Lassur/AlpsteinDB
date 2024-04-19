@@ -17,8 +17,8 @@
         th, td {
             border: 1px solid #dddddd;
             text-align: left;
-            padding: 5px;
-            font-size: 14px; /* Adjust font size */
+            padding: 8px;
+            font-size: 16px; /* Adjust font size */
             word-wrap: break-word; /* Allow long words to wrap */
         }
         th {
@@ -31,8 +31,8 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-        #pagination {
-            margin-top: 10px;
+        .collapsed {
+            display: none;
         }
     </style>
 </head>
@@ -80,14 +80,20 @@
 
             // Generate table header dynamically
             var headerRow = document.createElement('tr');
-            rows[0].forEach(columnName => {
+            rows[0].forEach((columnName, index) => {
                 var th = document.createElement('th');
                 var input = document.createElement('input');
                 input.type = "text";
                 input.placeholder = "Filter";
                 input.oninput = filterTable;
                 th.appendChild(input);
+                th.textContent = columnName;
                 headerRow.appendChild(th);
+                if (columnName === "Wer (un-merged)" || columnName === "Route (un-merged)") {
+                    th.addEventListener('click', function() {
+                        toggleColumn(index);
+                    });
+                }
             });
             tableHead.appendChild(headerRow);
 
@@ -100,6 +106,19 @@
             .then(response => response.text())
             .then(populateTable)
             .catch(error => console.error('Error fetching CSV file:', error));
+
+        // Function to toggle visibility of a column
+        function toggleColumn(columnIndex) {
+            var table = document.querySelector('table');
+            var rows = table.getElementsByTagName('tr');
+            var headerRow = rows[0];
+            var th = headerRow.getElementsByTagName('th')[columnIndex];
+            var isCollapsed = th.classList.toggle('collapsed');
+            var cells = document.querySelectorAll('tbody td:nth-child(' + (columnIndex + 1) + ')');
+            for (var i = 0; i < cells.length; i++) {
+                cells[i].style.display = isCollapsed ? 'none' : '';
+            }
+        }
 
         // Function to sort the table by column index
         function sortTable(columnIndex) {
