@@ -42,25 +42,17 @@
 
     <div id="filterOptions">
         Filter by:
-        <select id="filterGipfel" onchange="filterColumn(0)">
-            <option value="">-- Select Gipfel --</option>
-            <!-- Dynamically populate options using JavaScript -->
-        </select>
-        <select id="filterDatum" onchange="filterColumn(1)">
-            <option value="">-- Select Datum --</option>
-            <!-- Dynamically populate options using JavaScript -->
-        </select>
-        <select id="filterWer" onchange="filterColumn(2)">
-            <option value="">-- Select Wer --</option>
-            <!-- Dynamically populate options using JavaScript -->
-        </select>
-        <!-- Add filter options for other columns as needed -->
+        <!-- Filter input fields for each column -->
+        <input type="text" id="filterGipfel" oninput="filterTable()" placeholder="Filter Gipfel...">
+        <input type="text" id="filterDatum" oninput="filterTable()" placeholder="Filter Datum...">
+        <input type="text" id="filterWer" oninput="filterTable()" placeholder="Filter Wer...">
+        <!-- Add filter input fields for other columns as needed -->
     </div>
 
-    <input type="text" id="searchInput" placeholder="Search...">
+    <input type="text" id="searchInput" oninput="filterTable()" placeholder="Search...">
     <div id="pagination">
         Show 
-        <select id="rowsPerPage">
+        <select id="rowsPerPage" onchange="updateTable()">
             <option value="20">20</option>
             <option value="50">50</option>
             <option value="100">100</option>
@@ -90,7 +82,6 @@
         function populateTable(csvData) {
             var tableHead = document.getElementById('tableHead');
             var tableBody = document.querySelector('tbody');
-            var filterOptions = document.getElementById('filterOptions');
 
             // Parse CSV data into array of arrays
             var rows = csvData.split('\n').map(row => row.split(','));
@@ -109,23 +100,6 @@
                 headerRow.appendChild(th);
             });
             tableHead.appendChild(headerRow);
-
-            // Generate filter options dynamically
-            rows[0].forEach((columnName, index) => {
-                var select = document.getElementById('filter' + columnName);
-                if (select) {
-                    var options = new Set();
-                    for (var i = 1; i < rows.length; i++) {
-                        options.add(rows[i][index]);
-                    }
-                    options.forEach(option => {
-                        var optionElem = document.createElement('option');
-                        optionElem.value = option;
-                        optionElem.textContent = option;
-                        select.appendChild(optionElem);
-                    });
-                }
-            });
 
             // Generate table rows dynamically for the current page
             updateTable(tableBody);
@@ -175,7 +149,8 @@
         }
 
         // Function to update table rows for the current page
-        function updateTable(tableBody) {
+        function updateTable() {
+            var tableBody = document.querySelector('tbody');
             tableBody.innerHTML = ''; // Clear existing table rows
             var start = (currentPage - 1) * rowsPerPage + 1;
             var end = Math.min(start + rowsPerPage - 1, totalRows);
@@ -211,8 +186,7 @@
         function prevPage() {
             if (currentPage > 1) {
                 currentPage--;
-                var tableBody = document.querySelector('tbody');
-                updateTable(tableBody);
+                updateTable();
             }
         }
 
@@ -221,18 +195,9 @@
             var totalPages = Math.ceil(totalRows / rowsPerPage);
             if (currentPage < totalPages) {
                 currentPage++;
-                var tableBody = document.querySelector('tbody');
-                updateTable(tableBody);
+                updateTable();
             }
         }
-
-        // Function to handle changing the number of rows per page
-        document.getElementById('rowsPerPage').addEventListener('change', function() {
-            rowsPerPage = parseInt(this.value);
-            currentPage = 1; // Reset to first page
-            var tableBody = document.querySelector('tbody');
-            updateTable(tableBody);
-        });
 
         // Function to filter table rows based on input value
         function filterTable() {
@@ -245,8 +210,7 @@
                 var shouldShow = true;
                 for (var j = 0; j < cells.length; j++) {
                     var cell = cells[j];
-                    var columnIndex = j;
-                    var filterText = document.getElementById('tableHead').getElementsByTagName('input')[columnIndex].value.toLowerCase();
+                    var filterText = document.getElementById('tableHead').getElementsByTagName('input')[j].value.toLowerCase();
                     var cellText = cell.textContent.toLowerCase();
                     if (filterText && cellText.indexOf(filterText) === -1) {
                         shouldShow = false;
@@ -259,22 +223,7 @@
                 row.style.display = shouldShow ? '' : 'none';
             }
         }
-
-        // Function to filter table rows based on selected option for a column
-        function filterColumn(columnIndex) {
-            var select = document.getElementById('filter' + rows[0][columnIndex]);
-            var filterValue = select.value;
-            var table = document.querySelector('table');
-            var rows = table.getElementsByTagName('tr');
-            for (var i = 1; i < rows.length; i++) {
-                var row = rows[i];
-                var cell = row.getElementsByTagName('td')[columnIndex];
-                var cellText = cell.textContent || cell.innerText;
-                row.style.display = !filterValue || cellText.indexOf(filterValue) > -1 ? '' : 'none';
-            }
-        }
     </script>
 
 </body>
 </html>
-
