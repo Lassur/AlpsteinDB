@@ -57,17 +57,17 @@
     <table>
         <thead>
             <tr>
-                <th onclick="sortTable(0)">Gipfel</th>
-                <th onclick="sortTable(1)">Datum</th>
-                <th onclick="sortTable(2)">Wer</th>
-                <th onclick="sortTable(3)">Route</th>
-                <th onclick="sortTable(4)">Wer (un-merged)</th>
-                <th onclick="sortTable(5)">Route (un-merged)</th>
-                <th onclick="sortTable(6)">Notiz</th>
-                <th onclick="sortTable(7)">Gipfelbuch</th>
-                <th onclick="sortTable(8)">Erfasste Jahre</th>
-                <th onclick="sortTable(9)">Doppelt eingetragen</th>
-                <th onclick="sortTable(10)">Kommentar A. Koller</th>
+                <th><input type="text" id="filterGipfel" oninput="filterColumn(0)" placeholder="Filter"></th>
+                <th><input type="text" id="filterDatum" oninput="filterColumn(1)" placeholder="Filter"></th>
+                <th><input type="text" id="filterWer" oninput="filterColumn(2)" placeholder="Filter"></th>
+                <th><input type="text" id="filterRoute" oninput="filterColumn(3)" placeholder="Filter"></th>
+                <th><input type="text" id="filterWerUnmerged" oninput="filterColumn(4)" placeholder="Filter"></th>
+                <th><input type="text" id="filterRouteUnmerged" oninput="filterColumn(5)" placeholder="Filter"></th>
+                <th><input type="text" id="filterNotiz" oninput="filterColumn(6)" placeholder="Filter"></th>
+                <th><input type="text" id="filterGipfelbuch" oninput="filterColumn(7)" placeholder="Filter"></th>
+                <th><input type="text" id="filterErfassteJahre" oninput="filterColumn(8)" placeholder="Filter"></th>
+                <th><input type="text" id="filterDoppeltEingetragen" oninput="filterColumn(9)" placeholder="Filter"></th>
+                <th><input type="text" id="filterKommentarAKoller" oninput="filterColumn(10)" placeholder="Filter"></th>
             </tr>
         </thead>
         <tbody>
@@ -183,24 +183,25 @@
         });
 
         // Function to filter table rows based on input value
-        document.getElementById('searchInput').addEventListener('input', function() {
-            var filterValue = this.value.toLowerCase();
+        function filterColumn(columnIndex) {
+            var input = document.getElementById('filter' + columnIndex);
+            var filterValue = input.value.toLowerCase();
             var table = document.querySelector('table');
             var rows = table.getElementsByTagName('tr');
             for (var i = 1; i < rows.length; i++) {
                 var row = rows[i];
                 var cells = row.getElementsByTagName('td');
-                var shouldShow = false;
-                for (var j = 0; j < cells.length; j++) {
-                    var cell = cells[j];
-                    if (cell.textContent.toLowerCase().indexOf(filterValue) > -1) {
-                        shouldShow = true;
-                        break;
+                var cell = cells[columnIndex];
+                if (cell) {
+                    var cellText = cell.textContent.toLowerCase();
+                    if (cellText.indexOf(filterValue) > -1) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
                     }
                 }
-                row.style.display = shouldShow ? '' : 'none';
             }
-        });
+        }
     </script>
 
 </body>
