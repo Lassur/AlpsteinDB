@@ -138,3 +138,42 @@
                 var row = rows[i];
                 var cells = row.getElementsByTagName('td');
                 var
+                var shouldShow = false;
+                for (var j = 0; j < cells.length; j++) {
+                    var cell = cells[j];
+                    if (cell.textContent.toLowerCase().indexOf(filterValue) > -1) {
+                        shouldShow = true;
+                        break;
+                    }
+                }
+                row.style.display = shouldShow ? '' : 'none';
+            }
+        });
+
+        // Function to handle changing the number of rows per page
+        document.getElementById('rowsPerPage').addEventListener('change', function() {
+            var rowsPerPage = parseInt(this.value);
+            var tableBody = document.querySelector('tbody');
+            tableBody.innerHTML = ''; // Clear existing table rows
+            fetch('2024_Öberini_raw_webpage.csv')
+                .then(response => response.text())
+                .then(csvData => {
+                    var rows = csvData.split('\n').map(row => row.split(','));
+                    for (var i = 1; i <= rowsPerPage; i++) {
+                        var tr = document.createElement('tr');
+                        if (rows[i]) {
+                            rows[i].forEach(cellData => {
+                                var td = document.createElement('td');
+                                td.textContent = cellData;
+                                tr.appendChild(td);
+                            });
+                            tableBody.appendChild(tr);
+                        }
+                    }
+                })
+                .catch(error => console.error('Error fetching CSV file:', error));
+        });
+    </script>
+
+</body>
+</html>
