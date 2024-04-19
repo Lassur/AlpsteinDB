@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Table</title>
+    <style>
+        /* Your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Database Table</h1>
+
+    <input type="text" id="searchInput" placeholder="Search...">
+
+    <table>
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)">Gipfel</th>
+                <th onclick="sortTable(1)">Datum</th>
+                <th onclick="sortTable(2)">Wer</th>
+                <th onclick="sortTable(3)">Route</th>
+                <th onclick="sortTable(4)">Wer (un-merged)</th>
+                <th onclick="sortTable(5)">Route (un-merged)</th>
+                <th onclick="sortTable(6)">Notiz</th>
+                <th onclick="sortTable(7)">Gipfelbuch</th>
+                <th onclick="sortTable(8)">Erfasste Jahre</th>
+                <th onclick="sortTable(9)">Doppelt eingetragen</th>
+                <th onclick="sortTable(10)">Kommentar A. Koller</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dynamically populate table rows using JavaScript -->
+        </tbody>
+    </table>
+
+    <script>
+        // Function to populate the table with data from CSV file
+        function populateTable(csvData) {
+            var tableBody = document.querySelector('tbody');
+            // Parse CSV data into array of arrays
+            var rows = csvData.split('\n').map(row => row.split(','));
+            // Generate table rows dynamically
+            rows.forEach(row => {
+                var tr = document.createElement('tr');
+                row.forEach(cellData => {
+                    var td = document.createElement('td');
+                    td.textContent = cellData;
+                    tr.appendChild(td);
+                });
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // Fetch the CSV file and populate the table
+        fetch('2024_Öberini_raw_webpage.csv')
+            .then(response => response.text())
+            .then(populateTable)
+            .catch(error => console.error('Error fetching CSV file:', error));
+
+        // Function to sort the table by column index
+        function sortTable(columnIndex) {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.querySelector('table');
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName('td')[columnIndex];
+                    y = rows[i + 1].getElementsByTagName('td')[columnIndex];
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+
+        // Function to filter table rows based on input value
+        document.getElementById('searchInput').addEventListener('input', function() {
+            var filterValue = this.value.toLowerCase();
+            var table = document.querySelector('table');
+            var rows = table.getElementsByTagName('tr');
+            for (var i = 1; i < rows.length; i++) {
+                var row = rows[i];
+                var cells = row.getElementsByTagName('td');
+                var shouldShow = false;
+                for (var j = 0; j < cells.length; j++) {
+                    var cell = cells[j];
+                    if (cell.textContent.toLowerCase().indexOf(filterValue) > -1) {
+                        shouldShow = true;
+                        break;
+                    }
+                }
+                row.style.display = shouldShow ? '' : 'none';
+            }
+        });
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
