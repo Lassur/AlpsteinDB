@@ -43,13 +43,18 @@
     <div id="filterOptions">
         Filter by:
         <!-- Filter input fields for each column -->
-        <input type="text" id="filterGipfel" oninput="filterTable()" placeholder="Filter Gipfel...">
-        <input type="text" id="filterDatum" oninput="filterTable()" placeholder="Filter Datum...">
-        <input type="text" id="filterWer" oninput="filterTable()" placeholder="Filter Wer...">
+        <select id="filterGipfel" onchange="filterTable()" multiple>
+            <!-- Options will be dynamically populated -->
+        </select>
+        <select id="filterDatum" onchange="filterTable()" multiple>
+            <!-- Options will be dynamically populated -->
+        </select>
+        <select id="filterWer" onchange="filterTable()" multiple>
+            <!-- Options will be dynamically populated -->
+        </select>
         <!-- Add filter input fields for other columns as needed -->
     </div>
 
-    <input type="text" id="searchInput" oninput="filterTable()" placeholder="Search...">
     <div id="pagination">
         Show 
         <select id="rowsPerPage" onchange="updateTable()">
@@ -76,7 +81,7 @@
         var currentPage = 1; // Current page number
         var totalRows = 0; // Total number of rows
         var rowsPerPage = 20; // Default rows per page
-        var filters = Array.from({ length: 11 }, () => "");
+        var filters = Array.from({ length: 11 }, () => []);
 
         // Function to populate the table with data from CSV file
         function populateTable(csvData) {
@@ -91,15 +96,28 @@
             var headerRow = document.createElement('tr');
             rows[0].forEach(columnName => {
                 var th = document.createElement('th');
-                var input = document.createElement('input');
-                input.type = "text";
-                input.placeholder = "Filter";
-                input.oninput = filterTable;
-                th.appendChild(input);
                 th.textContent = columnName;
+                th.onclick = function() { sortTable(rows[0].indexOf(columnName)); };
                 headerRow.appendChild(th);
             });
             tableHead.appendChild(headerRow);
+
+            // Populate column filters
+            for (var i = 0; i < rows[0].length; i++) {
+                var select = document.getElementById('filter' + rows[0][i]);
+                if (select) {
+                    var options = new Set();
+                    for (var j = 1; j < rows.length; j++) {
+                        options.add(rows[j][i]);
+                    }
+                    options.forEach(option => {
+                        var optionElem = document.createElement('option');
+                        optionElem.value = option;
+                        optionElem.textContent = option;
+                        select.appendChild(optionElem);
+                    });
+                }
+            }
 
             // Generate table rows dynamically for the current page
             updateTable(tableBody);
@@ -199,26 +217,20 @@
             }
         }
 
-        // Function to filter table rows based on input value
+        // Function to filter table rows based on selected options
         function filterTable() {
             var table = document.querySelector('table');
             var rows = table.getElementsByTagName('tr');
-            var searchText = document.getElementById('searchInput').value.toLowerCase();
             for (var i = 1; i < rows.length; i++) {
                 var row = rows[i];
-                var cells = row.getElementsByTagName('td');
                 var shouldShow = true;
-                for (var j = 0; j < cells.length; j++) {
-                    var cell = cells[j];
-                    var filterText = document.getElementById('tableHead').getElementsByTagName('input')[j].value.toLowerCase();
-                    var cellText = cell.textContent.toLowerCase();
-                    if (filterText && cellText.indexOf(filterText) === -1) {
+                for (var j = 0; j < row.cells.length; j++) {
+                    var cell = row.cells[j];
+                    var filterValues = Array.from(document.getElementById('filter' + cell.textContent).selectedOptions).map(option => option.value);
+                    if (filterValues.length > 0 && !filterValues.includes(cell.textContent)) {
                         shouldShow = false;
                         break;
                     }
-                }
-                if (searchText && row.textContent.toLowerCase().indexOf(searchText) === -1) {
-                    shouldShow = false;
                 }
                 row.style.display = shouldShow ? '' : 'none';
             }
