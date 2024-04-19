@@ -57,17 +57,39 @@
     <table>
         <thead>
             <tr>
-                <th><input type="text" id="filterGipfel" oninput="filterColumn(0)" placeholder="Filter"></th>
-                <th><input type="text" id="filterDatum" oninput="filterColumn(1)" placeholder="Filter"></th>
-                <th><input type="text" id="filterWer" oninput="filterColumn(2)" placeholder="Filter"></th>
-                <th><input type="text" id="filterRoute" oninput="filterColumn(3)" placeholder="Filter"></th>
-                <th><input type="text" id="filterWerUnmerged" oninput="filterColumn(4)" placeholder="Filter"></th>
-                <th><input type="text" id="filterRouteUnmerged" oninput="filterColumn(5)" placeholder="Filter"></th>
-                <th><input type="text" id="filterNotiz" oninput="filterColumn(6)" placeholder="Filter"></th>
-                <th><input type="text" id="filterGipfelbuch" oninput="filterColumn(7)" placeholder="Filter"></th>
-                <th><input type="text" id="filterErfassteJahre" oninput="filterColumn(8)" placeholder="Filter"></th>
-                <th><input type="text" id="filterDoppeltEingetragen" oninput="filterColumn(9)" placeholder="Filter"></th>
-                <th><input type="text" id="filterKommentarAKoller" oninput="filterColumn(10)" placeholder="Filter"></th>
+                <th>
+                    <input type="text" id="filterGipfel" oninput="filterTable()" placeholder="Filter">
+                </th>
+                <th>
+                    <input type="text" id="filterDatum" oninput="filterTable()" placeholder="Filter">
+                </th>
+                <th>
+                    <input type="text" id="filterWer" oninput="filterTable()" placeholder="Filter">
+                </th>
+                <th>
+                    <input type="text" id="filterRoute" oninput="filterTable()" placeholder="Filter">
+                </th>
+                <th>
+                    <input type="text" id="filterWerUnmerged" oninput="filterTable()" placeholder="Filter">
+                </th>
+                <th>
+                    <input type="text" id="filterRouteUnmerged" oninput="filterTable()" placeholder="Filter">
+                </th>
+                <th>
+                    <input type="text" id="filterNotiz" oninput="filterTable()" placeholder="Filter">
+                </th>
+                <th>
+                    <input type="text" id="filterGipfelbuch" oninput="filterTable()" placeholder="Filter">
+                </th>
+                <th>
+                    <input type="text" id="filterErfassteJahre" oninput="filterTable()" placeholder="Filter">
+                </th>
+                <th>
+                    <input type="text" id="filterDoppeltEingetragen" oninput="filterTable()" placeholder="Filter">
+                </th>
+                <th>
+                    <input type="text" id="filterKommentarAKoller" oninput="filterTable()" placeholder="Filter">
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -79,6 +101,7 @@
         var currentPage = 1; // Current page number
         var totalRows = 0; // Total number of rows
         var rowsPerPage = 20; // Default rows per page
+        var filters = Array.from({ length: 11 }, () => []);
 
         // Function to populate the table with data from CSV file
         function populateTable(csvData) {
@@ -183,23 +206,25 @@
         });
 
         // Function to filter table rows based on input value
-        function filterColumn(columnIndex) {
-            var input = document.getElementById('filter' + columnIndex);
-            var filterValue = input.value.toLowerCase();
+        function filterTable() {
             var table = document.querySelector('table');
             var rows = table.getElementsByTagName('tr');
+            var searchText = document.getElementById('searchInput').value.toLowerCase();
             for (var i = 1; i < rows.length; i++) {
                 var row = rows[i];
                 var cells = row.getElementsByTagName('td');
-                var cell = cells[columnIndex];
-                if (cell) {
+                var shouldShow = false;
+                for (var j = 0; j < cells.length; j++) {
+                    var cell = cells[j];
+                    var columnIndex = j;
+                    var filterText = document.getElementById('filter' + columnIndex).value.toLowerCase();
                     var cellText = cell.textContent.toLowerCase();
-                    if (cellText.indexOf(filterValue) > -1) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
+                    if (cellText.indexOf(filterText) > -1 && cellText.indexOf(searchText) > -1) {
+                        shouldShow = true;
+                        break;
                     }
                 }
+                row.style.display = shouldShow ? '' : 'none';
             }
         }
     </script>
