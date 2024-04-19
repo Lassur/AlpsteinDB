@@ -17,10 +17,9 @@
         th, td {
             border: 1px solid #dddddd;
             text-align: left;
-            padding: 8px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            padding: 5px;
+            font-size: 14px; /* Adjust font size */
+            word-wrap: break-word; /* Allow long words to wrap */
         }
         th {
             background-color: #f2f2f2;
@@ -50,6 +49,9 @@
             <option value="100">100</option>
         </select> 
         rows per page
+        <button id="prevPage" onclick="prevPage()">Previous</button>
+        <button id="nextPage" onclick="nextPage()">Next</button>
+        <span id="currentPage">Page 1</span>
     </div>
 
     <table>
@@ -74,26 +76,20 @@
     </table>
 
     <script>
+        var currentPage = 1; // Current page number
+        var totalRows = 0; // Total number of rows
+        var rowsPerPage = 20; // Default rows per page
+
         // Function to populate the table with data from CSV file
         function populateTable(csvData) {
             var tableBody = document.querySelector('tbody');
-            var rowsPerPageSelect = document.getElementById('rowsPerPage');
-            var rowsPerPage = parseInt(rowsPerPageSelect.value);
 
             // Parse CSV data into array of arrays
             var rows = csvData.split('\n').map(row => row.split(','));
-            // Generate table rows dynamically
-            for (var i = 1; i <= rowsPerPage; i++) {
-                var tr = document.createElement('tr');
-                if (rows[i]) {
-                    rows[i].forEach(cellData => {
-                        var td = document.createElement('td');
-                        td.textContent = cellData;
-                        tr.appendChild(td);
-                    });
-                    tableBody.appendChild(tr);
-                }
-            }
+            totalRows = rows.length - 1; // Exclude header row
+
+            // Generate table rows dynamically for the current page
+            updateTable(tableBody);
         }
 
         // Fetch the CSV file and populate the table
@@ -126,6 +122,66 @@
             }
         }
 
+        // Function to update table rows for the current page
+        function updateTable(tableBody) {
+            tableBody.innerHTML = ''; // Clear existing table rows
+            var start = (currentPage - 1) * rowsPerPage + 1;
+            var end = Math.min(start + rowsPerPage - 1, totalRows);
+            fetch('2024_Öberini_raw_webpage.csv')
+                .then(response => response.text())
+                .then(csvData => {
+                    var rows = csvData.split('\n').map(row => row.split(','));
+                    for (var i = start; i <= end; i++) {
+                        var tr = document.createElement('tr');
+                        if (rows[i]) {
+                            rows[i].forEach(cellData => {
+                                var td = document.createElement('td');
+                                td.textContent = cellData;
+                                tr.appendChild(td);
+                            });
+                            tableBody.appendChild(tr);
+                        }
+                    }
+                    updatePagination();
+                })
+                .catch(error => console.error('Error fetching CSV file:', error));
+        }
+
+        // Function to update pagination controls
+        function updatePagination() {
+            var totalPages = Math.ceil(totalRows / rowsPerPage);
+            document.getElementById('currentPage').textContent = 'Page ' + currentPage + ' of ' + totalPages;
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages;
+        }
+
+        // Function to show the previous page
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                var tableBody = document.querySelector('tbody');
+                updateTable(tableBody);
+            }
+        }
+
+        // Function to show the next page
+        function nextPage() {
+            var totalPages = Math.ceil(totalRows / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                var tableBody = document.querySelector('tbody');
+                updateTable(tableBody);
+            }
+        }
+
+        // Function to handle changing the number of rows per page
+        document.getElementById('rowsPerPage').addEventListener('change', function() {
+            rowsPerPage = parseInt(this.value);
+            currentPage = 1; // Reset to first page
+            var tableBody = document.querySelector('tbody');
+            updateTable(tableBody);
+        });
+
         // Function to filter table rows based on input value
         document.getElementById('searchInput').addEventListener('input', function() {
             var filterValue = this.value.toLowerCase();
@@ -144,30 +200,6 @@
                 }
                 row.style.display = shouldShow ? '' : 'none';
             }
-        });
-
-        // Function to handle changing the number of rows per page
-        document.getElementById('rowsPerPage').addEventListener('change', function() {
-            var rowsPerPage = parseInt(this.value);
-            var tableBody = document.querySelector('tbody');
-            tableBody.innerHTML = ''; // Clear existing table rows
-            fetch('2024_Öberini_raw_webpage.csv')
-                .then(response => response.text())
-                .then(csvData => {
-                    var rows = csvData.split('\n').map(row => row.split(','));
-                    for (var i = 1; i <= rowsPerPage; i++) {
-                        var tr = document.createElement('tr');
-                        if (rows[i]) {
-                            rows[i].forEach(cellData => {
-                                var td = document.createElement('td');
-                                td.textContent = cellData;
-                                tr.appendChild(td);
-                            });
-                            tableBody.appendChild(tr);
-                        }
-                    }
-                })
-                .catch(error => console.error('Error fetching CSV file:', error));
         });
     </script>
 
