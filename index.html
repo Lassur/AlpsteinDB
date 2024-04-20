@@ -47,9 +47,25 @@
         top: 0;
         z-index: 1;
     }
-    .filter-select {
-        width: 100%;
-        box-sizing: border-box;
+    .filter-icon {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="18px" height="18px"><path d="M0 0h24v24H0z" fill="none"/><path d="M8 14l3-3 3 3H8z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+        background-size: cover;
+        cursor: pointer;
+    }
+    .filter-dropdown {
+        position: absolute;
+        background-color: white;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 5px;
+        z-index: 2;
+        display: none;
+    }
+    .filter-dropdown.show {
+        display: block;
     }
 </style>
 </head>
@@ -62,17 +78,26 @@
 <table id="mountainTable">
   <thead class="header-fixed">
     <tr>
-      <th>Gipfel</th>
-      <th>Datum</th>
-      <th>Wer</th>
-      <th>Route</th>
-      <th>Wer (un-merged)</th>
-      <th>Route (un-merged)</th>
-      <th>Notiz</th>
-      <th>Gipfelbuch</th>
-      <th>Erfasste Jahre</th>
-      <th>Doppelt eingetragen</th>
-      <th>Kommentar A. Koller</th>
+      <th>
+        Gipfel
+        <span class="filter-icon" onclick="toggleFilterDropdown(0)"></span>
+        <div id="filterDropdown0" class="filter-dropdown">
+          <select id="filterSelect0" class="filter-select" multiple onchange="filterTable(0)">
+            <!-- Filter options will be added dynamically using JavaScript -->
+          </select>
+        </div>
+      </th>
+      <th>
+        Datum
+        <span class="filter-icon" onclick="toggleFilterDropdown(1)"></span>
+        <div id="filterDropdown1" class="filter-dropdown">
+          <select id="filterSelect1" class="filter-select" multiple onchange="filterTable(1)">
+            <!-- Filter options will be added dynamically using JavaScript -->
+          </select>
+        </div>
+      </th>
+      <!-- Repeat the pattern for other columns -->
+      <!--  ...  -->
     </tr>
   </thead>
   <tbody id="mountainTableBody">
@@ -89,16 +114,23 @@
             .then(response => response.text())
             .then(data => {
                 const rows = data.split('\n').slice(1); // skip header row
-                const tbody = document.getElementById('mountainTableBody');
+                const uniqueValues = Array.from({ length: 11 }, () => new Set()); // Array to hold unique values for each column
                 rows.forEach(row => {
                     const columns = row.split(',');
-                    const tr = document.createElement('tr');
-                    columns.forEach(column => {
-                        const td = document.createElement('td');
-                        td.textContent = column;
-                        tr.appendChild(td);
+                    columns.forEach((column, index) => {
+                        uniqueValues[index].add(column.trim()); // Add unique values for each column
                     });
-                    tbody.appendChild(tr);
+                });
+
+                // Populate filter dropdowns
+                uniqueValues.forEach((values, index) => {
+                    const select = document.getElementById(`filterSelect${index}`);
+                    values.forEach(value => {
+                        const option = document.createElement('option');
+                        option.value = value;
+                        option.textContent = value;
+                        select.appendChild(option);
+                    });
                 });
             });
     }
@@ -123,9 +155,14 @@
         rows.forEach(row => table.appendChild(row));
     }
 
+    function toggleFilterDropdown(index) {
+        const dropdown = document.getElementById(`filterDropdown${index}`);
+        dropdown.classList.toggle('show');
+    }
+
     function filterTable(columnIndex) {
         const select = document.getElementById(`filterSelect${columnIndex}`);
-        const filterValue = select.value.toUpperCase();
+        const selectedOptions = Array.from(select.selectedOptions).map(option => option.value.toUpperCase());
         const table = document.getElementById('mountainTable');
         const rows = table.getElementsByTagName('tr');
 
@@ -133,7 +170,7 @@
             const cell = rows[i].getElementsByTagName('td')[columnIndex];
             if (cell) {
                 const cellText = cell.textContent.toUpperCase() || cell.innerText.toUpperCase();
-                if (filterValue === 'ALL' || cellText.includes(filterValue)) {
+                if (selectedOptions.includes('ALL') || selectedOptions.includes(cellText)) {
                     rows[i].style.display = '';
                 } else {
                     rows[i].style.display = 'none';
@@ -145,3 +182,4 @@
 
 </body>
 </html>
+
