@@ -47,6 +47,12 @@
         top: 0;
         z-index: 1;
     }
+    .filter-input {
+        margin-bottom: 10px;
+        padding: 5px;
+        width: 100%;
+        box-sizing: border-box;
+    }
 </style>
 </head>
 <body>
@@ -55,6 +61,7 @@
     <h1>Alpstein Database</h1>
 </header>
 
+<input type="text" id="filterInput" class="filter-input" onkeyup="filterTable()" placeholder="Filter table...">
 <table id="mountainTable">
   <thead class="header-fixed">
     <tr>
@@ -117,6 +124,33 @@
             table.rows[0].cells[columnIndex].classList.add('asc');
         }
         rows.forEach(row => table.appendChild(row));
+    }
+
+    function filterTable() {
+        const input = document.getElementById('filterInput');
+        const filterValue = input.value.toUpperCase();
+        const table = document.getElementById('mountainTable');
+        const rows = table.getElementsByTagName('tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            let shouldHide = true;
+            const cells = rows[i].getElementsByTagName('td');
+            for (let j = 0; j < cells.length; j++) {
+                const cell = cells[j];
+                if (cell) {
+                    const cellText = cell.textContent.toUpperCase() || cell.innerText.toUpperCase();
+                    if (cellText.indexOf(filterValue) > -1) {
+                        shouldHide = false;
+                        break;
+                    }
+                }
+            }
+            if (shouldHide) {
+                rows[i].style.display = 'none';
+            } else {
+                rows[i].style.display = '';
+            }
+        }
     }
 </script>
 
