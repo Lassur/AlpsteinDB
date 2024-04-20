@@ -47,6 +47,29 @@
         top: 0;
         z-index: 1;
     }
+    .dialog-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+    .dialog-box {
+        background-color: white;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+    .dialog-close {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        cursor: pointer;
+    }
 </style>
 </head>
 <body>
@@ -54,6 +77,8 @@
 <header>
     <h1>Alpstein Database</h1>
 </header>
+
+<button onclick="openFilterDialog()">Filter</button>
 
 <table id="mountainTable">
   <thead class="header-fixed">
@@ -78,6 +103,17 @@
 <footer>
     <p>&copy; Andi Koller, 2024</p>
 </footer>
+
+<div id="filterDialog" class="dialog-overlay">
+    <div class="dialog-box">
+        <span class="dialog-close" onclick="closeFilterDialog()">X</span>
+        <h2>Filter Data</h2>
+        <form id="filterForm">
+            <!-- Filter fields will be added dynamically using JavaScript -->
+            <button type="button" onclick="applyFilters()">Confirm</button>
+        </form>
+    </div>
+</div>
 
 <script>
     window.onload = function() {
@@ -117,6 +153,76 @@
             table.rows[0].cells[columnIndex].classList.add('asc');
         }
         rows.forEach(row => table.appendChild(row));
+    }
+
+    function openFilterDialog() {
+        const dialog = document.getElementById('filterDialog');
+        dialog.style.display = 'flex';
+        createFilterFields();
+    }
+
+    function closeFilterDialog() {
+        const dialog = document.getElementById('filterDialog');
+        dialog.style.display = 'none';
+    }
+
+    function createFilterFields() {
+        const form = document.getElementById('filterForm');
+        form.innerHTML = ''; // Clear existing fields
+
+        const headers = document.querySelectorAll('#mountainTable th');
+        headers.forEach((header, index) => {
+            const label = document.createElement('label');
+            label.textContent = header.textContent;
+            const select = document.createElement('select');
+            select.setAttribute('multiple', true);
+            select.setAttribute('data-index', index);
+            select.classList.add('filter-select');
+            header.parentElement.dataset.index = index;
+            const uniqueValues = new Set();
+            Array.from(document.querySelectorAll(`#mountainTable td:nth-child(${index + 1})`)).forEach(cell => {
+                uniqueValues.add(cell.textContent.trim());
+            });
+            uniqueValues.forEach(value => {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = value;
+                select.appendChild(option);
+            });
+            label.appendChild(select);
+            form.appendChild(label);
+        });
+    }
+
+    function applyFilters() {
+        const form = document.getElementById('filterForm');
+        const filters = {};
+        form.querySelectorAll('.filter-select').forEach(select => {
+            const index = select.dataset.index;
+            filters[index] = Array.from(select.selectedOptions).map(option => option.value);
+        });
+
+        const table = document.getElementById('mountainTable');
+        const rows = table.getElementsByTagName('tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            let isVisible = true;
+            for (let j = 0; j < cells.length; j++) {
+                const cellText = cells[j].textContent.trim();
+                if (filters[j] && filters[j].length > 0 && !filters[j].includes(cellText)) {
+                    isVisible = false;
+                    break;
+                }
+            }
+            if (isVisible) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+        }
+
+        closeFilterDialog();
     }
 </script>
 
