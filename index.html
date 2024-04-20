@@ -98,7 +98,7 @@
         <thead id="tableHead">
             <!-- Header row will be dynamically populated -->
         </thead>
-        <tbody>
+        <tbody id="tableBody">
             <!-- Dynamically populate table rows using JavaScript -->
         </tbody>
     </table>
@@ -116,7 +116,7 @@
         // Function to populate the table with data from CSV file
         function populateTable(csvData) {
             var tableHead = document.getElementById('tableHead');
-            var tableBody = document.querySelector('tbody');
+            var tableBody = document.getElementById('tableBody');
 
             // Parse CSV data into array of arrays
             var rows = csvData.split('\n').map(row => row.split(','));
@@ -155,7 +155,7 @@
             }
 
             // Generate table rows dynamically for the current page
-            updateTable(tableBody);
+            updateTable();
         }
 
         // Fetch the CSV file and populate the table
@@ -194,7 +194,7 @@
 
         // Function to update table rows for the current page
         function updateTable() {
-            var tableBody = document.querySelector('tbody');
+            var tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = ''; // Clear existing table rows
             var start = (currentPage - 1) * rowsPerPage + 1;
             var end = Math.min(start + rowsPerPage - 1, totalRows);
@@ -255,4 +255,3 @@
 
 </body>
 </html>
-
