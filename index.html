@@ -43,7 +43,7 @@
             z-index: 1;
         }
         th.collapsible {
-            cursor: pointer;
+            cursor: default;
         }
         tr:nth-child(even) {
             background-color: #f2f2f2;
@@ -133,7 +133,9 @@
                 th.textContent = columnName;
                 if (index === 4 || index === 5 || index === 9 || index === 10) { // Collapse specified columns
                     th.className = 'collapsible';
-                    th.onclick = function() { toggleColumn(index); };
+                } else {
+                    th.className = 'sortable';
+                    th.addEventListener('click', () => sortColumn(index));
                 }
                 headerRow.appendChild(th);
             });
@@ -166,17 +168,35 @@
             .then(populateTable)
             .catch(error => console.error('Error fetching CSV file:', error));
 
-        // Function to toggle visibility of a column
-        function toggleColumn(columnIndex) {
+        // Function to sort table column
+        function sortColumn(columnIndex) {
             var table = document.querySelector('table');
-            var rows = table.getElementsByTagName('tr');
-            var headerRow = rows[0];
-            var th = headerRow.getElementsByTagName('th')[columnIndex];
-            var isCollapsed = th.classList.toggle('collapsed');
-            var cells = document.querySelectorAll('tbody td:nth-child(' + (columnIndex + 1) + ')');
-            for (var i = 0; i < cells.length; i++) {
-                cells[i].style.display = isCollapsed ? 'none' : '';
-            }
+            var rows = Array.from(table.querySelectorAll('tbody tr'));
+            var headerRow = table.querySelector('thead tr');
+            var sortType = headerRow.querySelectorAll('th')[columnIndex].getAttribute('data-sort') || 'asc';
+
+            rows.sort((rowA, rowB) => {
+                var cellA = rowA.querySelectorAll('td')[columnIndex].textContent;
+                var cellB = rowB.querySelectorAll('td')[columnIndex].textContent;
+
+                if (sortType === 'asc') {
+                    return cellA.localeCompare(cellB);
+                } else {
+                    return cellB.localeCompare(cellA);
+                }
+            });
+
+            // Update data-sort attribute for sorting direction
+            headerRow.querySelectorAll('th').forEach((th, index) => {
+                if (index === columnIndex) {
+                    th.setAttribute('data-sort', sortType === 'asc' ? 'desc' : 'asc');
+                } else {
+                    th.removeAttribute('data-sort');
+                }
+            });
+
+            // Reorder rows in table body
+            rows.forEach(row => table.querySelector('tbody').appendChild(row));
         }
 
         // Function to update table rows for the current page
@@ -252,4 +272,3 @@
 
 </body>
 </html>
-
