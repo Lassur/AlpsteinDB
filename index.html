@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mountain Table</title>
+<title>Alpstein Database</title>
 <style>
     table {
         width: 100%;
@@ -16,32 +16,47 @@
     }
     th {
         background-color: #f2f2f2;
+        cursor: pointer; /* Add cursor pointer for sortable columns */
+    }
+    th:hover {
+        background-color: #ddd; /* Change background color on hover */
+    }
+    footer {
+        margin-top: 20px;
+        text-align: center;
+        font-style: italic;
     }
 </style>
 </head>
 <body>
 
-<h2>Mountain Table</h2>
+<header>
+    <h1>Alpstein Database</h1>
+</header>
 
 <table id="mountainTable">
   <thead>
     <tr>
-      <th>Gipfel</th>
-      <th>Datum</th>
-      <th>Wer</th>
-      <th>Route</th>
-      <th>Wer (un-merged)</th>
-      <th>Route (un-merged)</th>
-      <th>Notiz</th>
-      <th>Gipfelbuch</th>
-      <th>Erfasste Jahre</th>
-      <th>Doppelt eingetragen</th>
-      <th>Kommentar A. Koller</th>
+      <th onclick="sortTable(0)">Gipfel</th>
+      <th onclick="sortTable(1)">Datum</th>
+      <th onclick="sortTable(2)">Wer</th>
+      <th onclick="sortTable(3)">Route</th>
+      <th onclick="sortTable(4)">Wer (un-merged)</th>
+      <th onclick="sortTable(5)">Route (un-merged)</th>
+      <th onclick="sortTable(6)">Notiz</th>
+      <th onclick="sortTable(7)">Gipfelbuch</th>
+      <th onclick="sortTable(8)">Erfasste Jahre</th>
+      <th onclick="sortTable(9)">Doppelt eingetragen</th>
+      <th onclick="sortTable(10)">Kommentar A. Koller</th>
     </tr>
   </thead>
   <tbody id="mountainTableBody">
   </tbody>
 </table>
+
+<footer>
+    <p>&copy; Andi Koller, 2024</p>
+</footer>
 
 <script>
     window.onload = function() {
@@ -62,8 +77,27 @@
                 });
             });
     }
+
+    function sortTable(columnIndex) {
+        const table = document.getElementById('mountainTable');
+        const rows = Array.from(table.getElementsByTagName('tr')).slice(1); // Exclude header row
+        const isAscending = table.rows[0].cells[columnIndex].classList.contains('asc');
+        rows.sort((a, b) => {
+            const aValue = a.cells[columnIndex].textContent.trim();
+            const bValue = b.cells[columnIndex].textContent.trim();
+            return (aValue > bValue) ? 1 : ((bValue > aValue) ? -1 : 0);
+        });
+        if (isAscending) {
+            rows.reverse();
+            table.rows[0].cells[columnIndex].classList.remove('asc');
+            table.rows[0].cells[columnIndex].classList.add('desc');
+        } else {
+            table.rows[0].cells[columnIndex].classList.remove('desc');
+            table.rows[0].cells[columnIndex].classList.add('asc');
+        }
+        rows.forEach(row => table.appendChild(row));
+    }
 </script>
 
 </body>
 </html>
-
