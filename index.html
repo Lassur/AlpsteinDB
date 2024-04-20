@@ -47,9 +47,7 @@
         top: 0;
         z-index: 1;
     }
-    .filter-input {
-        margin-bottom: 10px;
-        padding: 5px;
+    .filter-select {
         width: 100%;
         box-sizing: border-box;
     }
@@ -61,21 +59,20 @@
     <h1>Alpstein Database</h1>
 </header>
 
-<input type="text" id="filterInput" class="filter-input" onkeyup="filterTable()" placeholder="Filter table...">
 <table id="mountainTable">
   <thead class="header-fixed">
     <tr>
-      <th onclick="sortTable(0)">Gipfel</th>
-      <th onclick="sortTable(1)">Datum</th>
-      <th onclick="sortTable(2)">Wer</th>
-      <th onclick="sortTable(3)">Route</th>
-      <th onclick="sortTable(4)">Wer (un-merged)</th>
-      <th onclick="sortTable(5)">Route (un-merged)</th>
-      <th onclick="sortTable(6)">Notiz</th>
-      <th onclick="sortTable(7)">Gipfelbuch</th>
-      <th onclick="sortTable(8)">Erfasste Jahre</th>
-      <th onclick="sortTable(9)">Doppelt eingetragen</th>
-      <th onclick="sortTable(10)">Kommentar A. Koller</th>
+      <th>Gipfel</th>
+      <th>Datum</th>
+      <th>Wer</th>
+      <th>Route</th>
+      <th>Wer (un-merged)</th>
+      <th>Route (un-merged)</th>
+      <th>Notiz</th>
+      <th>Gipfelbuch</th>
+      <th>Erfasste Jahre</th>
+      <th>Doppelt eingetragen</th>
+      <th>Kommentar A. Koller</th>
     </tr>
   </thead>
   <tbody id="mountainTableBody">
@@ -126,29 +123,21 @@
         rows.forEach(row => table.appendChild(row));
     }
 
-    function filterTable() {
-        const input = document.getElementById('filterInput');
-        const filterValue = input.value.toUpperCase();
+    function filterTable(columnIndex) {
+        const select = document.getElementById(`filterSelect${columnIndex}`);
+        const filterValue = select.value.toUpperCase();
         const table = document.getElementById('mountainTable');
         const rows = table.getElementsByTagName('tr');
 
         for (let i = 0; i < rows.length; i++) {
-            let shouldHide = true;
-            const cells = rows[i].getElementsByTagName('td');
-            for (let j = 0; j < cells.length; j++) {
-                const cell = cells[j];
-                if (cell) {
-                    const cellText = cell.textContent.toUpperCase() || cell.innerText.toUpperCase();
-                    if (cellText.indexOf(filterValue) > -1) {
-                        shouldHide = false;
-                        break;
-                    }
+            const cell = rows[i].getElementsByTagName('td')[columnIndex];
+            if (cell) {
+                const cellText = cell.textContent.toUpperCase() || cell.innerText.toUpperCase();
+                if (filterValue === 'ALL' || cellText.includes(filterValue)) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
                 }
-            }
-            if (shouldHide) {
-                rows[i].style.display = 'none';
-            } else {
-                rows[i].style.display = '';
             }
         }
     }
