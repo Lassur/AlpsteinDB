@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Database Table</title>
+    <title>Alpstein Database</title>
     <style>
         /* Your CSS styles here */
         body {
@@ -28,17 +28,39 @@
             top: 0;
             z-index: 1;
         }
+        th.collapsible {
+            cursor: pointer;
+        }
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
         .collapsed {
             display: none;
         }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Database Table</h1>
+    <header>
+        <h1>Alpstein Database</h1>
+    </header>
+
+    <h2>Database Table</h2>
 
     <div id="filterOptions">
         Filter by:
@@ -77,6 +99,10 @@
         </tbody>
     </table>
 
+    <footer>
+        &copy; Andi Koller, @2024
+    </footer>
+
     <script>
         var currentPage = 1; // Current page number
         var totalRows = 0; // Total number of rows
@@ -94,10 +120,13 @@
 
             // Generate table header dynamically
             var headerRow = document.createElement('tr');
-            rows[0].forEach(columnName => {
+            rows[0].forEach((columnName, index) => {
                 var th = document.createElement('th');
                 th.textContent = columnName;
-                th.onclick = function() { sortTable(rows[0].indexOf(columnName)); };
+                if (index === 4 || index === 5 || index === 9 || index === 10) { // Collapse specified columns
+                    th.className = 'collapsible';
+                    th.onclick = function() { toggleColumn(index); };
+                }
                 headerRow.appendChild(th);
             });
             tableHead.appendChild(headerRow);
@@ -139,30 +168,6 @@
             var cells = document.querySelectorAll('tbody td:nth-child(' + (columnIndex + 1) + ')');
             for (var i = 0; i < cells.length; i++) {
                 cells[i].style.display = isCollapsed ? 'none' : '';
-            }
-        }
-
-        // Function to sort the table by column index
-        function sortTable(columnIndex) {
-            var table, rows, switching, i, x, y, shouldSwitch;
-            table = document.querySelector('table');
-            switching = true;
-            while (switching) {
-                switching = false;
-                rows = table.rows;
-                for (i = 1; i < (rows.length - 1); i++) {
-                    shouldSwitch = false;
-                    x = rows[i].getElementsByTagName('td')[columnIndex];
-                    y = rows[i + 1].getElementsByTagName('td')[columnIndex];
-                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                        shouldSwitch = true;
-                        break;
-                    }
-                }
-                if (shouldSwitch) {
-                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                    switching = true;
-                }
             }
         }
 
