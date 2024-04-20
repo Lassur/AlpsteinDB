@@ -5,26 +5,49 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Alpstein Database</title>
 <style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+    header {
+        background-color: #333;
+        color: white;
+        padding: 10px 0;
+        text-align: center;
+    }
+    footer {
+        background-color: #333;
+        color: white;
+        padding: 10px 0;
+        text-align: center;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
     table {
         width: 100%;
         border-collapse: collapse;
+        table-layout: fixed;
     }
     th, td {
         border: 1px solid black;
         padding: 8px;
         text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     th {
         background-color: #f2f2f2;
-        cursor: pointer; /* Add cursor pointer for sortable columns */
+        cursor: pointer;
     }
     th:hover {
-        background-color: #ddd; /* Change background color on hover */
+        background-color: #ddd;
     }
-    footer {
-        margin-top: 20px;
-        text-align: center;
-        font-style: italic;
+    .header-fixed {
+        position: sticky;
+        top: 0;
+        z-index: 1;
     }
 </style>
 </head>
@@ -35,7 +58,7 @@
 </header>
 
 <table id="mountainTable">
-  <thead>
+  <thead class="header-fixed">
     <tr>
       <th onclick="sortTable(0)">Gipfel</th>
       <th onclick="sortTable(1)">Datum</th>
