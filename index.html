@@ -1,257 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gipfelbücher Database</title>
-    <style>
-        /* Your CSS styles here */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: white;
-            color: black;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: black;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-        }
-        h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            table-layout: fixed;
-        }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-            font-size: 14px; /* Adjust font size for table cells */
-            word-wrap: break-word; /* Allow long words to wrap */
-        }
-        th {
-            background-color: #f2f2f2;
-            cursor: pointer;
-            position: sticky;
-            top: 40px;
-            z-index: 1;
-        }
-        th.collapsible {
-            cursor: default;
-            display: none;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .collapsed {
-            display: none;
-        }
-        footer {
-            background-color: black;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mountain Table</title>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
 </head>
 <body>
 
-    <header>
-        <h1>Gipfelbücher Database</h1>
-    </header>
+<h2>Mountain Table</h2>
 
-    <div id="filterOptions">
-        Filter by:
-        <!-- Filter input fields for each column -->
-        <select id="filterGipfel" onchange="filterTable()" multiple>
-            <!-- Options will be dynamically populated -->
-        </select>
-        <select id="filterDatum" onchange="filterTable()" multiple>
-            <!-- Options will be dynamically populated -->
-        </select>
-        <!-- Add filter input fields for other columns as needed -->
-    </div>
+<table id="mountainTable">
+  <thead>
+    <tr>
+      <th>Gipfel</th>
+      <th>Datum</th>
+      <th>Wer</th>
+      <th>Route</th>
+      <th>Wer (un-merged)</th>
+      <th>Route (un-merged)</th>
+      <th>Notiz</th>
+      <th>Gipfelbuch</th>
+      <th>Erfasste Jahre</th>
+      <th>Doppelt eingetragen</th>
+      <th>Kommentar A. Koller</th>
+    </tr>
+  </thead>
+  <tbody id="mountainTableBody">
+  </tbody>
+</table>
 
-    <div id="pagination">
-        Show 
-        <select id="rowsPerPage" onchange="updateTable()">
-            <option value="20">20</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-        </select> 
-        rows per page
-        <button id="prevPage" onclick="prevPage()">Previous</button>
-        <button id="nextPage" onclick="nextPage()">Next</button>
-        <span id="currentPage">Page 1</span>
-    </div>
-
-    <table>
-        <thead id="tableHead">
-            <!-- Header row will be dynamically populated -->
-        </thead>
-        <tbody id="tableBody">
-            <!-- Dynamically populate table rows using JavaScript -->
-        </tbody>
-    </table>
-
-    <footer>
-        &copy; Andi Koller, @2024
-    </footer>
-
-    <script>
-        var currentPage = 1; // Current page number
-        var totalRows = 0; // Total number of rows
-        var rowsPerPage = 20; // Default rows per page
-        var filters = Array.from({ length: 11 }, () => []);
-
-        // Function to populate the table with data from CSV file
-        function populateTable(csvData) {
-            var tableHead = document.getElementById('tableHead');
-            var tableBody = document.getElementById('tableBody');
-
-            // Parse CSV data into array of arrays
-            var rows = csvData.split('\n').map(row => row.split(','));
-            totalRows = rows.length - 1; // Exclude header row
-
-            // Generate table header dynamically
-            var headerRow = document.createElement('tr');
-            rows[0].forEach((columnName, index) => {
-                if (index !== 4 && index !== 5 && index !== 9 && index !== 10) { // Exclude specified columns
-                    var th = document.createElement('th');
-                    th.textContent = columnName;
-                    th.className = 'sortable';
-                    th.addEventListener('click', () => sortColumn(index));
-                    headerRow.appendChild(th);
-                }
+<script>
+    window.onload = function() {
+        fetch('2024_Öberini_raw_webpage.csv')
+            .then(response => response.text())
+            .then(data => {
+                const rows = data.split('\n').slice(1); // skip header row
+                const tbody = document.getElementById('mountainTableBody');
+                rows.forEach(row => {
+                    const columns = row.split(',');
+                    const tr = document.createElement('tr');
+                    columns.forEach(column => {
+                        const td = document.createElement('td');
+                        td.textContent = column;
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
             });
-            tableHead.appendChild(headerRow);
-
-            // Populate column filters
-            for (var i = 0; i < rows[0].length; i++) {
-                if (i !== 4 && i !== 5 && i !== 9 && i !== 10) { // Exclude specified columns
-                    var select = document.getElementById('filter' + rows[0][i]);
-                    if (select) {
-                        var options = new Set();
-                        for (var j = 1; j < rows.length; j++) {
-                            options.add(rows[j][i]);
-                        }
-                        options.forEach(option => {
-                            var optionElem = document.createElement('option');
-                            optionElem.value = option;
-                            optionElem.textContent = option;
-                            select.appendChild(optionElem);
-                        });
-                    }
-                }
-            }
-
-            // Generate table rows dynamically for the current page
-            updateTable();
-        }
-
-        // Fetch the CSV file and populate the table
-        // Removed to exclude fetching data
-
-        // Function to sort table column
-        function sortColumn(columnIndex) {
-            var table = document.querySelector('table');
-            var rows = Array.from(table.querySelectorAll('tbody tr'));
-            var headerRow = table.querySelector('thead tr');
-            var sortType = headerRow.querySelectorAll('th')[columnIndex].getAttribute('data-sort') || 'asc';
-
-            rows.sort((rowA, rowB) => {
-                var cellA = rowA.querySelectorAll('td')[columnIndex].textContent;
-                var cellB = rowB.querySelectorAll('td')[columnIndex].textContent;
-
-                if (sortType === 'asc') {
-                    return cellA.localeCompare(cellB);
-                } else {
-                    return cellB.localeCompare(cellA);
-                }
-            });
-
-            // Update data-sort attribute for sorting direction
-            headerRow.querySelectorAll('th').forEach((th, index) => {
-                if (index === columnIndex) {
-                    th.setAttribute('data-sort', sortType === 'asc' ? 'desc' : 'asc');
-                } else {
-                    th.removeAttribute('data-sort');
-                }
-            });
-
-            // Reorder rows in table body
-            rows.forEach(row => table.querySelector('tbody').appendChild(row));
-        }
-
-        // Function to update table rows for the current page
-        function updateTable() {
-            var tableBody = document.getElementById('tableBody');
-            tableBody.innerHTML = ''; // Clear existing table rows
-            var start = (currentPage - 1) * rowsPerPage + 1;
-            var end = Math.min(start + rowsPerPage - 1, totalRows);
-
-            // Fetching data is removed
-
-            // Dynamically populate table rows using JavaScript
-            // Removed to exclude fetching data
-
-            // Update pagination controls
-            updatePagination();
-        }
-
-        // Function to update pagination controls
-        function updatePagination() {
-            var totalPages = Math.ceil(totalRows / rowsPerPage);
-            document.getElementById('currentPage').textContent = 'Page ' + currentPage + ' of ' + totalPages;
-            document.getElementById('prevPage').disabled = currentPage === 1;
-            document.getElementById('nextPage').disabled = currentPage === totalPages;
-        }
-
-        // Function to show the previous page
-        function prevPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                updateTable();
-            }
-        }
-
-        // Function to show the next page
-        function nextPage() {
-            var totalPages = Math.ceil(totalRows / rowsPerPage);
-            if (currentPage < totalPages) {
-                currentPage++;
-                updateTable();
-            }
-        }
-
-        // Function to filter table rows based on selected options
-        function filterTable() {
-            var table = document.querySelector('table');
-            var rows = table.getElementsByTagName('tr');
-            for (var i = 1; i < rows.length; i++) {
-                var row = rows[i];
-                var shouldShow = true;
-                for (var j = 0; j < row.cells.length; j++) {
-                    var cell = row.cells[j];
-                    var filterValues = Array.from(document.getElementById('filter' + cell.textContent).selectedOptions).map(option => option.value);
-                    if (filterValues.length > 0 && !filterValues.includes(cell.textContent)) {
-                        shouldShow = false;
-                        break;
-                    }
-                }
-                row.style.display = shouldShow ? '' : 'none';
-            }
-        }
-    </script>
+    }
+</script>
 
 </body>
 </html>
+
