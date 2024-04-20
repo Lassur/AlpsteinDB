@@ -44,6 +44,7 @@
         }
         th.collapsible {
             cursor: default;
+            display: none;
         }
         tr:nth-child(even) {
             background-color: #f2f2f2;
@@ -68,8 +69,6 @@
         <h1>Gipfelbücher Database</h1>
     </header>
 
-    <h2>Database Table</h2>
-
     <div id="filterOptions">
         Filter by:
         <!-- Filter input fields for each column -->
@@ -77,9 +76,6 @@
             <!-- Options will be dynamically populated -->
         </select>
         <select id="filterDatum" onchange="filterTable()" multiple>
-            <!-- Options will be dynamically populated -->
-        </select>
-        <select id="filterWer" onchange="filterTable()" multiple>
             <!-- Options will be dynamically populated -->
         </select>
         <!-- Add filter input fields for other columns as needed -->
@@ -129,32 +125,32 @@
             // Generate table header dynamically
             var headerRow = document.createElement('tr');
             rows[0].forEach((columnName, index) => {
-                var th = document.createElement('th');
-                th.textContent = columnName;
-                if (index === 4 || index === 5 || index === 9 || index === 10) { // Collapse specified columns
-                    th.className = 'collapsible';
-                } else {
+                if (index !== 4 && index !== 5 && index !== 9 && index !== 10) { // Exclude specified columns
+                    var th = document.createElement('th');
+                    th.textContent = columnName;
                     th.className = 'sortable';
                     th.addEventListener('click', () => sortColumn(index));
+                    headerRow.appendChild(th);
                 }
-                headerRow.appendChild(th);
             });
             tableHead.appendChild(headerRow);
 
             // Populate column filters
             for (var i = 0; i < rows[0].length; i++) {
-                var select = document.getElementById('filter' + rows[0][i]);
-                if (select) {
-                    var options = new Set();
-                    for (var j = 1; j < rows.length; j++) {
-                        options.add(rows[j][i]);
+                if (i !== 4 && i !== 5 && i !== 9 && i !== 10) { // Exclude specified columns
+                    var select = document.getElementById('filter' + rows[0][i]);
+                    if (select) {
+                        var options = new Set();
+                        for (var j = 1; j < rows.length; j++) {
+                            options.add(rows[j][i]);
+                        }
+                        options.forEach(option => {
+                            var optionElem = document.createElement('option');
+                            optionElem.value = option;
+                            optionElem.textContent = option;
+                            select.appendChild(optionElem);
+                        });
                     }
-                    options.forEach(option => {
-                        var optionElem = document.createElement('option');
-                        optionElem.value = option;
-                        optionElem.textContent = option;
-                        select.appendChild(optionElem);
-                    });
                 }
             }
 
@@ -163,10 +159,7 @@
         }
 
         // Fetch the CSV file and populate the table
-        fetch('2024_Öberini_raw_webpage.csv')
-            .then(response => response.text())
-            .then(populateTable)
-            .catch(error => console.error('Error fetching CSV file:', error));
+        // Removed to exclude fetching data
 
         // Function to sort table column
         function sortColumn(columnIndex) {
@@ -205,24 +198,14 @@
             tableBody.innerHTML = ''; // Clear existing table rows
             var start = (currentPage - 1) * rowsPerPage + 1;
             var end = Math.min(start + rowsPerPage - 1, totalRows);
-            fetch('2024_Öberini_raw_webpage.csv')
-                .then(response => response.text())
-                .then(csvData => {
-                    var rows = csvData.split('\n').map(row => row.split(','));
-                    for (var i = start; i <= end; i++) {
-                        var tr = document.createElement('tr');
-                        if (rows[i]) {
-                            rows[i].forEach(cellData => {
-                                var td = document.createElement('td');
-                                td.textContent = cellData;
-                                tr.appendChild(td);
-                            });
-                            tableBody.appendChild(tr);
-                        }
-                    }
-                    updatePagination();
-                })
-                .catch(error => console.error('Error fetching CSV file:', error));
+
+            // Fetching data is removed
+
+            // Dynamically populate table rows using JavaScript
+            // Removed to exclude fetching data
+
+            // Update pagination controls
+            updatePagination();
         }
 
         // Function to update pagination controls
@@ -272,3 +255,4 @@
 
 </body>
 </html>
+
