@@ -64,6 +64,8 @@
         padding: 20px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         max-width: 500px;
+        overflow-y: auto; /* Added scroll functionality */
+        max-height: 80vh; /* Added max height */
     }
     .dialog-close {
         position: absolute;
@@ -195,7 +197,8 @@
             Array.from(document.querySelectorAll(`#mountainTable td:nth-child(${index + 1})`)).forEach(cell => {
                 uniqueValues.add(cell.textContent.trim());
             });
-            uniqueValues.forEach(value => {
+            const sortedValues = Array.from(uniqueValues).sort((a, b) => a.localeCompare(b)); // Sort values alphabetically
+            sortedValues.forEach(value => {
                 const option = document.createElement('option');
                 option.value = value;
                 option.textContent = value;
@@ -240,3 +243,4 @@
 
 </body>
 </html>
+
