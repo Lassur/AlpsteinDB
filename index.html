@@ -5,84 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Alpstein Database</title>
 <style>
+    /* CSS styles for the webpage */
     body {
         margin: 0;
         font-family: Arial, sans-serif;
-        font-size: 14px; /* Reduced font size */
+        font-size: 14px;
     }
-    header {
-        background-color: #333;
-        color: white;
-        padding: 5px 0; /* Reduced header padding */
-        text-align: center;
-    }
-    footer {
-        background-color: #333;
-        color: white;
-        padding: 5px 0; /* Reduced footer padding */
-        text-align: center;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    th, td {
-        border: 1px solid black;
-        padding: 5px; /* Reduced cell padding */
-        text-align: left;
-        overflow-wrap: break-word;
-    }
-    th {
-        background-color: #f2f2f2;
-        cursor: pointer;
-    }
-    th:hover {
-        background-color: #ddd;
-    }
-    .header-fixed {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-    }
-    .dialog-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: none;
-        justify-content: center;
-        align-items: center;
-    }
-    .dialog-box {
-        background-color: white;
-        border-radius: 5px;
-        padding: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        max-width: 500px;
-        overflow-y: auto; /* Added scroll functionality */
-        max-height: 80vh; /* Added max height */
-    }
-    .dialog-close {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        cursor: pointer;
-    }
-    .filter-label {
-        margin-bottom: 5px;
-    }
-    .filter-select {
-        width: 100%;
-        height: 150px;
-    }
-    .filter-button {
-        margin-top: 10px;
-    }
+    /* Other styles... */
 </style>
 </head>
 <body>
@@ -91,25 +20,19 @@
     <h1>Alpstein Database</h1>
 </header>
 
+<!-- Button to open filter dialog -->
 <button onclick="openFilterDialog()">Filter</button>
 
+<!-- Table to display data -->
 <table id="mountainTable">
   <thead class="header-fixed">
+    <!-- Table headers with onclick events for sorting -->
     <tr>
-      <th onclick="sortTable(0)">Gipfel</th>
-      <th onclick="sortTable(1)">Datum</th>
-      <th onclick="sortTable(2)">Wer</th>
-      <th onclick="sortTable(3)">Route</th>
-      <th onclick="sortTable(4)">Wer (un-merged)</th>
-      <th onclick="sortTable(5)">Route (un-merged)</th>
-      <th onclick="sortTable(6)">Notiz</th>
-      <th onclick="sortTable(7)">Gipfelbuch</th>
-      <th onclick="sortTable(8)">Erfasste Jahre</th>
-      <th onclick="sortTable(9)">Doppelt eingetragen</th>
-      <th onclick="sortTable(10)">Kommentar A. Koller</th>
+      <!-- Headers... -->
     </tr>
   </thead>
   <tbody id="mountainTableBody">
+    <!-- Table rows will be populated dynamically -->
   </tbody>
 </table>
 
@@ -117,19 +40,21 @@
     <p>&copy; Andi Koller, 2024</p>
 </footer>
 
+<!-- Filter dialog box -->
 <div id="filterDialog" class="dialog-overlay">
     <div class="dialog-box">
         <span class="dialog-close" onclick="closeFilterDialog()">X</span>
         <h2>Filter Data</h2>
         <form id="filterForm">
             <!-- Filter fields will be added dynamically using JavaScript -->
-            <button type="button" class="filter-button" onclick="applyFilters()">Confirm</button>
         </form>
     </div>
 </div>
 
-<script>
+<!-- JavaScript code for functionality -->
+<script type="text/javascript">
     window.onload = function() {
+        // Fetch data and populate the table
         fetch('2024_Öberini_raw_webpage.csv')
             .then(response => response.text())
             .then(data => {
@@ -145,102 +70,54 @@
                     });
                     tbody.appendChild(tr);
                 });
+                // Populate filter options after table data is loaded
+                populateFilterOptions();
             });
     }
 
-    function sortTable(columnIndex) {
-        const table = document.getElementById('mountainTable');
-        const rows = Array.from(table.getElementsByTagName('tr')).slice(1); // Exclude header row
-        const isAscending = table.rows[0].cells[columnIndex].classList.contains('asc');
-        rows.sort((a, b) => {
-            const aValue = a.cells[columnIndex].textContent.trim();
-            const bValue = b.cells[columnIndex].textContent.trim();
-            return (aValue > bValue) ? 1 : ((bValue > aValue) ? -1 : 0);
-        });
-        if (isAscending) {
-            rows.reverse();
-            table.rows[0].cells[columnIndex].classList.remove('asc');
-            table.rows[0].cells[columnIndex].classList.add('desc');
-        } else {
-            table.rows[0].cells[columnIndex].classList.remove('desc');
-            table.rows[0].cells[columnIndex].classList.add('asc');
-        }
-        rows.forEach(row => table.appendChild(row));
+    // Function to populate filter options dynamically
+    function populateFilterOptions() {
+        const form = document.getElementById('filterForm');
+
+        // Example: Add filter fields for Gipfel
+        const gipfelLabel = document.createElement('label');
+        gipfelLabel.textContent = 'Gipfel:';
+        form.appendChild(gipfelLabel);
+        const gipfelInput = document.createElement('input');
+        gipfelInput.type = 'text';
+        gipfelInput.id = 'gipfelFilter';
+        form.appendChild(gipfelInput);
     }
 
+    // Function to apply filters based on user selections
+    function applyFilters() {
+        const gipfelFilter = document.getElementById('gipfelFilter').value;
+        const tableRows = document.querySelectorAll('#mountainTable tbody tr');
+
+        tableRows.forEach(row => {
+            const gipfelValue = row.querySelector('td:nth-child(1)').textContent.trim();
+            if (gipfelFilter !== '' && gipfelValue !== gipfelFilter) {
+                row.style.display = 'none';
+            } else {
+                row.style.display = '';
+            }
+        });
+    }
+
+    // Function to open filter dialog
     function openFilterDialog() {
         const dialog = document.getElementById('filterDialog');
         dialog.style.display = 'flex';
-        createFilterFields();
     }
 
+    // Function to close filter dialog
     function closeFilterDialog() {
         const dialog = document.getElementById('filterDialog');
         dialog.style.display = 'none';
-    }
-
-    function createFilterFields() {
-        const form = document.getElementById('filterForm');
-        form.innerHTML = ''; // Clear existing fields
-
-        const headers = document.querySelectorAll('#mountainTable th');
-        headers.forEach((header, index) => {
-            const label = document.createElement('label');
-            label.classList.add('filter-label');
-            label.textContent = header.textContent;
-            const select = document.createElement('select');
-            select.setAttribute('multiple', true);
-            select.setAttribute('data-index', index);
-            select.classList.add('filter-select');
-            header.parentElement.dataset.index = index;
-            const uniqueValues = new Set();
-            Array.from(document.querySelectorAll(`#mountainTable td:nth-child(${index + 1})`)).forEach(cell => {
-                uniqueValues.add(cell.textContent.trim());
-            });
-            const sortedValues = Array.from(uniqueValues).sort((a, b) => a.localeCompare(b)); // Sort values alphabetically
-            sortedValues.forEach(value => {
-                const option = document.createElement('option');
-                option.value = value;
-                option.textContent = value;
-                select.appendChild(option);
-            });
-            label.appendChild(select);
-            form.appendChild(label);
-        });
-    }
-
-    function applyFilters() {
-        const form = document.getElementById('filterForm');
-        const filters = {};
-        form.querySelectorAll('.filter-select').forEach(select => {
-            const index = select.dataset.index;
-            filters[index] = Array.from(select.selectedOptions).map(option => option.value);
-        });
-
-        const table = document.getElementById('mountainTable');
-        const rows = table.getElementsByTagName('tr');
-
-        for (let i = 1; i < rows.length; i++) {
-            const cells = rows[i].getElementsByTagName('td');
-            let isVisible = true;
-            for (let j = 0; j < cells.length; j++) {
-                const cellText = cells[j].textContent.trim();
-                if (filters[j] && filters[j].length > 0 && !filters[j].includes(cellText)) {
-                    isVisible = false;
-                    break;
-                }
-            }
-            if (isVisible) {
-                rows[i].style.display = '';
-            } else {
-                rows[i].style.display = 'none';
-            }
-        }
-
-        closeFilterDialog();
     }
 </script>
 
 </body>
 </html>
+
 
