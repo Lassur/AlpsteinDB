@@ -130,37 +130,51 @@
 
   document.getElementById("searchInput").addEventListener("keyup", filterTable);
 
-  function paginateTable() {
+  function paginateTable(currentPage) {
     var table, rows, pageButtons, i;
     table = document.getElementById("mountainsTable");
     rows = table.rows;
     pageButtons = document.getElementById("pagination");
     pageButtons.innerHTML = "";
     var pageCount = Math.ceil((rows.length - 1) / 10); // 10 rows per page
-    for (i = 0; i < pageCount; i++) {
-      var btn = document.createElement("button");
-      btn.innerHTML = i + 1;
-      btn.addEventListener("click", function() {
-        var pageNum = parseInt(this.innerHTML);
-        var start = (pageNum - 1) * 10 + 1;
-        var end = pageNum * 10 + 1;
-        for (var j = 1; j < rows.length; j++) {
-          if (j >= start && j < end) {
-            rows[j].style.display = "";
-          } else {
-            rows[j].style.display = "none";
-          }
-        }
-        var currentBtn = pageButtons.getElementsByClassName("active");
-        if (currentBtn.length > 0) {
-          currentBtn[0].className = currentBtn[0].className.replace("active", "");
-        }
-        this.className += " active";
-      });
-      pageButtons.appendChild(btn);
+    var startPage = Math.max(1, currentPage - 2);
+    var endPage = Math.min(pageCount, currentPage + 2);
+    if (currentPage > 1) {
+      createPaginationButton("First", 1);
+      createPaginationButton("Previous", currentPage - 1);
     }
-    if (pageCount > 0) {
-      pageButtons.getElementsByTagName("button")[0].click();
+    for (i = startPage; i <= endPage; i++) {
+      createPaginationButton(i, i, currentPage === i ? "active" : "");
+    }
+    if (currentPage < pageCount) {
+      createPaginationButton("Next", currentPage + 1);
+      createPaginationButton("Last", pageCount);
+    }
+    showPage(currentPage);
+  }
+
+  function createPaginationButton(text, pageNum, className) {
+    var btn = document.createElement("button");
+    btn.innerHTML = text;
+    btn.className = className || "";
+    btn.addEventListener("click", function() {
+      paginateTable(pageNum);
+    });
+    document.getElementById("pagination").appendChild(btn);
+  }
+
+  function showPage(pageNum) {
+    var table, rows, i;
+    table = document.getElementById("mountainsTable");
+    rows = table.rows;
+    var start = (pageNum - 1) * 10 + 1;
+    var end = Math.min(pageNum * 10, rows.length);
+    for (i = 1; i < rows.length; i++) {
+      if (i >= start && i <= end) {
+        rows[i].style.display = "";
+      } else {
+        rows[i].style.display = "none";
+      }
     }
   }
 
@@ -179,7 +193,7 @@
             cell.textContent = rowData[j];
           }
         }
-        paginateTable();
+        paginateTable(1);
       })
       .catch(error => console.error(error));
   }
@@ -189,3 +203,4 @@
 
 </body>
 </html>
+
