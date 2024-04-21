@@ -3,121 +3,180 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alpstein Database</title>
+<title>Mountains Table</title>
 <style>
-    /* CSS styles for the webpage */
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-    }
-    /* Other styles... */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    cursor: pointer;
+  }
+
+  .filters {
+    margin-bottom: 10px;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border: none;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+  }
+
+  .pagination button.active {
+    background-color: #ddd;
+  }
 </style>
 </head>
 <body>
 
-<header>
-    <h1>Alpstein Database</h1>
-</header>
+<h1>Mountains Table</h1>
 
-<!-- Button to open filter dialog -->
-<button onclick="openFilterDialog()">Filter</button>
+<div class="filters">
+  <input type="text" id="searchInput" placeholder="Search...">
+</div>
 
-<!-- Table to display data -->
-<table id="mountainTable">
-  <thead class="header-fixed">
-    <!-- Table headers with onclick events for sorting -->
+<table id="mountainsTable">
+  <thead>
     <tr>
-      <!-- Headers... -->
+      <th onclick="sortTable(0)">Gipfel</th>
+      <th onclick="sortTable(1)">Datum</th>
+      <th onclick="sortTable(2)">Wer</th>
+      <th onclick="sortTable(3)">Route</th>
+      <th onclick="sortTable(4)">Notiz</th>
+      <th onclick="sortTable(5)">Gipfelbuch</th>
+      <th onclick="sortTable(6)">Erfasste Jahre</th>
     </tr>
   </thead>
-  <tbody id="mountainTableBody">
-    <!-- Table rows will be populated dynamically -->
+  <tbody>
+    <!-- Populate with your data dynamically -->
+    <tr>
+      <td>Mount Everest</td>
+      <td>2023-05-12</td>
+      <td>John Doe</td>
+      <td>South Col Route</td>
+      <td>Reached summit despite harsh weather</td>
+      <td>Yes</td>
+      <td>5</td>
+    </tr>
+    <!-- Add more rows as needed -->
   </tbody>
 </table>
 
-<footer>
-    <p>&copy; Andi Koller, 2024</p>
-</footer>
+<div class="pagination" id="pagination"></div>
 
-<!-- Filter dialog box -->
-<div id="filterDialog" class="dialog-overlay">
-    <div class="dialog-box">
-        <span class="dialog-close" onclick="closeFilterDialog()">X</span>
-        <h2>Filter Data</h2>
-        <form id="filterForm">
-            <!-- Filter fields will be added dynamically using JavaScript -->
-        </form>
-    </div>
-</div>
-
-<!-- JavaScript code for functionality -->
-<script type="text/javascript">
-    window.onload = function() {
-        // Fetch data and populate the table
-        fetch('2024_Öberini_raw_webpage.csv')
-            .then(response => response.text())
-            .then(data => {
-                const rows = data.split('\n').slice(1); // skip header row
-                const tbody = document.getElementById('mountainTableBody');
-                rows.forEach(row => {
-                    const columns = row.split(',');
-                    const tr = document.createElement('tr');
-                    columns.forEach(column => {
-                        const td = document.createElement('td');
-                        td.textContent = column;
-                        tr.appendChild(td);
-                    });
-                    tbody.appendChild(tr);
-                });
-                // Populate filter options after table data is loaded
-                populateFilterOptions();
-            });
+<script>
+  function sortTable(n) {
+    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+    table = document.getElementById("mountainsTable");
+    switching = true;
+    dir = "asc"; 
+    while (switching) {
+      switching = false;
+      rows = table.rows;
+      for (i = 1; i < (rows.length - 1); i++) {
+        shouldSwitch = false;
+        x = rows[i].getElementsByTagName("td")[n];
+        y = rows[i + 1].getElementsByTagName("td")[n];
+        if (dir == "asc") {
+          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            shouldSwitch = true;
+            break;
+          }
+        } else if (dir == "desc") {
+          if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+      }
+      if (shouldSwitch) {
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+        switchcount ++; 
+      } else {
+        if (switchcount == 0 && dir == "asc") {
+          dir = "desc";
+          switching = true;
+        }
+      }
     }
+  }
 
-    // Function to populate filter options dynamically
-    function populateFilterOptions() {
-        const form = document.getElementById('filterForm');
-
-        // Example: Add filter fields for Gipfel
-        const gipfelLabel = document.createElement('label');
-        gipfelLabel.textContent = 'Gipfel:';
-        form.appendChild(gipfelLabel);
-        const gipfelInput = document.createElement('input');
-        gipfelInput.type = 'text';
-        gipfelInput.id = 'gipfelFilter';
-        form.appendChild(gipfelInput);
+  function filterTable() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("searchInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("mountainsTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0]; // Change index to filter specific column
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
     }
+  }
 
-    // Function to apply filters based on user selections
-    function applyFilters() {
-        const gipfelFilter = document.getElementById('gipfelFilter').value;
-        const tableRows = document.querySelectorAll('#mountainTable tbody tr');
+  document.getElementById("searchInput").addEventListener("keyup", filterTable);
 
-        tableRows.forEach(row => {
-            const gipfelValue = row.querySelector('td:nth-child(1)').textContent.trim();
-            if (gipfelFilter !== '' && gipfelValue !== gipfelFilter) {
-                row.style.display = 'none';
-            } else {
-                row.style.display = '';
-            }
-        });
+  function paginateTable() {
+    var table, rows, pageButtons, i;
+    table = document.getElementById("mountainsTable");
+    rows = table.rows;
+    pageButtons = document.getElementById("pagination");
+    pageButtons.innerHTML = "";
+    var pageCount = Math.ceil((rows.length - 1) / 10); // 10 rows per page
+    for (i = 0; i < pageCount; i++) {
+      var btn = document.createElement("button");
+      btn.innerHTML = i + 1;
+      btn.addEventListener("click", function() {
+        var pageNum = parseInt(this.innerHTML);
+        var start = (pageNum - 1) * 10 + 1;
+        var end = pageNum * 10 + 1;
+        for (var j = 1; j < rows.length; j++) {
+          if (j >= start && j < end) {
+            rows[j].style.display = "";
+          } else {
+            rows[j].style.display = "none";
+          }
+        }
+        var currentBtn = pageButtons.getElementsByClassName("active");
+        if (currentBtn.length > 0) {
+          currentBtn[0].className = currentBtn[0].className.replace("active", "");
+        }
+        this.className += " active";
+      });
+      pageButtons.appendChild(btn);
     }
-
-    // Function to open filter dialog
-    function openFilterDialog() {
-        const dialog = document.getElementById('filterDialog');
-        dialog.style.display = 'flex';
+    if (pageCount > 0) {
+      pageButtons.getElementsByTagName("button")[0].click();
     }
+  }
 
-    // Function to close filter dialog
-    function closeFilterDialog() {
-        const dialog = document.getElementById('filterDialog');
-        dialog.style.display = 'none';
-    }
+  paginateTable();
 </script>
 
 </body>
 </html>
-
 
