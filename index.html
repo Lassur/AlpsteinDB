@@ -63,12 +63,23 @@
         border-radius: 5px;
         padding: 20px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        max-width: 500px;
     }
     .dialog-close {
         position: absolute;
         top: 5px;
         right: 5px;
         cursor: pointer;
+    }
+    .filter-label {
+        margin-bottom: 5px;
+    }
+    .filter-select {
+        width: 100%;
+        height: 150px;
+    }
+    .filter-button {
+        margin-top: 10px;
     }
 </style>
 </head>
@@ -110,7 +121,7 @@
         <h2>Filter Data</h2>
         <form id="filterForm">
             <!-- Filter fields will be added dynamically using JavaScript -->
-            <button type="button" onclick="applyFilters()">Confirm</button>
+            <button type="button" class="filter-button" onclick="applyFilters()">Confirm</button>
         </form>
     </div>
 </div>
@@ -173,6 +184,7 @@
         const headers = document.querySelectorAll('#mountainTable th');
         headers.forEach((header, index) => {
             const label = document.createElement('label');
+            label.classList.add('filter-label');
             label.textContent = header.textContent;
             const select = document.createElement('select');
             select.setAttribute('multiple', true);
