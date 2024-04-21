@@ -65,17 +65,7 @@
     </tr>
   </thead>
   <tbody>
-    <!-- Populate with your data dynamically -->
-    <tr>
-      <td>Mount Everest</td>
-      <td>2023-05-12</td>
-      <td>John Doe</td>
-      <td>South Col Route</td>
-      <td>Reached summit despite harsh weather</td>
-      <td>Yes</td>
-      <td>5</td>
-    </tr>
-    <!-- Add more rows as needed -->
+    <!-- Data will be populated dynamically -->
   </tbody>
 </table>
 
@@ -174,9 +164,28 @@
     }
   }
 
-  paginateTable();
+  // Fetching and parsing CSV file
+  function fetchCSV() {
+    fetch('2024_Öberini_raw_webpage.csv')
+      .then(response => response.text())
+      .then(data => {
+        var rows = data.split('\n');
+        var table = document.getElementById("mountainsTable").getElementsByTagName('tbody')[0];
+        for (var i = 0; i < rows.length; i++) {
+          var rowData = rows[i].split(',');
+          var row = table.insertRow(-1);
+          for (var j = 0; j < rowData.length; j++) {
+            var cell = row.insertCell(-1);
+            cell.textContent = rowData[j];
+          }
+        }
+        paginateTable();
+      })
+      .catch(error => console.error(error));
+  }
+
+  fetchCSV();
 </script>
 
 </body>
 </html>
-
