@@ -1,94 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Dog Website</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #ffffff;
-      color: #333333;
-    }
-    header {
-      background-color: #8B4513;
-      color: #ffffff;
-      padding: 20px;
-      text-align: center;
-    }
-    nav {
-      background-color: #8B4513;
-      color: #ffffff;
-      padding: 10px;
-      text-align: center;
-    }
-    nav a {
-      color: #ffffff;
-      text-decoration: none;
-      margin: 0 10px;
-    }
-    .content {
-      padding: 20px;
-    }
-    footer {
-      background-color: #8B4513;
-      color: #ffffff;
-      text-align: center;
-      padding: 10px;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mountain Table</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
 
-<header>
-  <h1>Welcome to My Dog Website</h1>
-</header>
+<h2>Mountain Table</h2>
 
-<nav>
-  <a href="#home">Home</a>
-  <a href="#dogsitting">Dog Sitting</a>
-  <a href="#dogcare">Dog Care</a>
-  <a href="#blog">Blog</a>
-  <a href="#contact">Contact</a>
-</nav>
-
-<div class="content">
-  <section id="home">
-    <h2>Home</h2>
-    <p>Welcome to our website about dogs! We provide information on various topics related to dogs including dog sitting, dog care, and more. Feel free to explore!</p>
-    <img src="dog_image.jpg" alt="Dog">
-  </section>
-
-  <section id="dogsitting">
-    <h2>Dog Sitting</h2>
-    <p>Planning a trip or need someone to look after your furry friend while you're away? Our dog sitting services offer a safe and comfortable environment for your dog. Our experienced sitters ensure your dog receives the love and attention they deserve while you're gone.</p>
-  </section>
-
-  <section id="dogcare">
-    <h2>Dog Care</h2>
-    <p>Proper care is essential for keeping your dog healthy and happy. Learn about nutrition, grooming, exercise, and other important aspects of dog care to ensure your canine companion leads a fulfilling life. From puppyhood to senior years, we've got you covered with expert tips and advice.</p>
-  </section>
-
-  <section id="blog">
-    <h2>Blog</h2>
-    <p>Stay up-to-date with the latest trends, tips, and news in the world of dogs through our informative blog posts. Whether you're looking for training advice, breed spotlights, or heartwarming stories, our blog has something for every dog lover.</p>
-  </section>
-
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>Have questions or want to get in touch with us? Feel free to reach out! You can contact us via email at contact@dogwebsite.com or fill out the form below. We're always happy to hear from fellow dog enthusiasts!</p>
-  </section>
-</div>
-
-<footer>
-  <p>Contact us: contact@dogwebsite.com</p>
-</footer>
+<table>
+    <thead>
+        <tr>
+            <th>Gipfel</th>
+            <th>Datum</th>
+            <th>Wer</th>
+            <th>Route</th>
+            <th>Notiz</th>
+            <th>Gipfelbuch</th>
+            <th>Erfasste Jahre</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Add your table rows here -->
+        <tr>
+            <td>Mountain 1</td>
+            <td>2024-04-22</td>
+            <td>John Doe</td>
+            <td>Route 1</td>
+            <td>Note 1</td>
+            <td>Yes</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>Mountain 2</td>
+            <td>2024-04-23</td>
+            <td>Jane Smith</td>
+            <td>Route 2</td>
+            <td>Note 2</td>
+            <td>No</td>
+            <td>3</td>
+        </tr>
+        <!-- Add more rows as needed -->
+    </tbody>
+</table>
 
 </body>
 </html>
-
-
-
