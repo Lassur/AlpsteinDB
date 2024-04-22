@@ -1,206 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mountains Table</title>
-<style>
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  th, td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-
-  th {
-    cursor: pointer;
-  }
-
-  .filters {
-    margin-bottom: 10px;
-  }
-
-  .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-  }
-
-  .pagination button {
-    margin: 0 5px;
-    padding: 5px 10px;
-    cursor: pointer;
-    border: none;
-    background-color: #f0f0f0;
-    border-radius: 5px;
-  }
-
-  .pagination button.active {
-    background-color: #ddd;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Dog Website</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #333333;
+    }
+    header {
+      background-color: #8B4513;
+      color: #ffffff;
+      padding: 20px;
+      text-align: center;
+    }
+    nav {
+      background-color: #8B4513;
+      color: #ffffff;
+      padding: 10px;
+      text-align: center;
+    }
+    nav a {
+      color: #ffffff;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    .content {
+      padding: 20px;
+    }
+    footer {
+      background-color: #8B4513;
+      color: #ffffff;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
 
-<h1>Mountains Table</h1>
+<header>
+  <h1>Welcome to My Dog Website</h1>
+</header>
 
-<div class="filters">
-  <input type="text" id="searchInput" placeholder="Search...">
+<nav>
+  <a href="#home">Home</a>
+  <a href="#dogsitting">Dog Sitting</a>
+  <a href="#dogcare">Dog Care</a>
+  <a href="#blog">Blog</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<div class="content">
+  <section id="home">
+    <h2>Home</h2>
+    <p>Welcome to our website about dogs!</p>
+    <img src="dog_image.jpg" alt="Dog">
+  </section>
+
+  <section id="dogsitting">
+    <h2>Dog Sitting</h2>
+    <p>Learn about dog sitting services...</p>
+  </section>
+
+  <section id="dogcare">
+    <h2>Dog Care</h2>
+    <p>Discover how to take care of your dog...</p>
+  </section>
+
+  <section id="blog">
+    <h2>Blog</h2>
+    <p>Read our latest blog posts...</p>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>Contact us for more information...</p>
+  </section>
 </div>
 
-<table id="mountainsTable">
-  <thead>
-    <tr>
-      <th onclick="sortTable(0)">Gipfel</th>
-      <th onclick="sortTable(1)">Datum</th>
-      <th onclick="sortTable(2)">Wer</th>
-      <th onclick="sortTable(3)">Route</th>
-      <th onclick="sortTable(4)">Notiz</th>
-      <th onclick="sortTable(5)">Gipfelbuch</th>
-      <th onclick="sortTable(6)">Erfasste Jahre</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- Data will be populated dynamically -->
-  </tbody>
-</table>
-
-<div class="pagination" id="pagination"></div>
-
-<script>
-  function sortTable(n) {
-    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-    table = document.getElementById("mountainsTable");
-    switching = true;
-    dir = "asc"; 
-    while (switching) {
-      switching = false;
-      rows = table.rows;
-      for (i = 1; i < (rows.length - 1); i++) {
-        shouldSwitch = false;
-        x = rows[i].getElementsByTagName("td")[n];
-        y = rows[i + 1].getElementsByTagName("td")[n];
-        if (dir == "asc") {
-          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-            shouldSwitch = true;
-            break;
-          }
-        } else if (dir == "desc") {
-          if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-            shouldSwitch = true;
-            break;
-          }
-        }
-      }
-      if (shouldSwitch) {
-        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-        switching = true;
-        switchcount ++; 
-      } else {
-        if (switchcount == 0 && dir == "asc") {
-          dir = "desc";
-          switching = true;
-        }
-      }
-    }
-  }
-
-  function filterTable() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("searchInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("mountainsTable");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td")[0]; // Change index to filter specific column
-      if (td) {
-        txtValue = td.textContent || td.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          tr[i].style.display = "";
-        } else {
-          tr[i].style.display = "none";
-        }
-      }
-    }
-  }
-
-  document.getElementById("searchInput").addEventListener("keyup", filterTable);
-
-  function paginateTable(currentPage) {
-    var table, rows, pageButtons, i;
-    table = document.getElementById("mountainsTable");
-    rows = table.rows;
-    pageButtons = document.getElementById("pagination");
-    pageButtons.innerHTML = "";
-    var pageCount = Math.ceil((rows.length - 1) / 10); // 10 rows per page
-    var startPage = Math.max(1, currentPage - 2);
-    var endPage = Math.min(pageCount, currentPage + 2);
-    if (currentPage > 1) {
-      createPaginationButton("First", 1);
-      createPaginationButton("Previous", currentPage - 1);
-    }
-    for (i = startPage; i <= endPage; i++) {
-      createPaginationButton(i, i, currentPage === i ? "active" : "");
-    }
-    if (currentPage < pageCount) {
-      createPaginationButton("Next", currentPage + 1);
-      createPaginationButton("Last", pageCount);
-    }
-    showPage(currentPage);
-  }
-
-  function createPaginationButton(text, pageNum, className) {
-    var btn = document.createElement("button");
-    btn.innerHTML = text;
-    btn.className = className || "";
-    btn.addEventListener("click", function() {
-      paginateTable(pageNum);
-    });
-    document.getElementById("pagination").appendChild(btn);
-  }
-
-  function showPage(pageNum) {
-    var table, rows, i;
-    table = document.getElementById("mountainsTable");
-    rows = table.rows;
-    var start = (pageNum - 1) * 10 + 1;
-    var end = Math.min(pageNum * 10, rows.length);
-    for (i = 1; i < rows.length; i++) {
-      if (i >= start && i <= end) {
-        rows[i].style.display = "";
-      } else {
-        rows[i].style.display = "none";
-      }
-    }
-  }
-
-  // Fetching and parsing CSV file
-  function fetchCSV() {
-    fetch('2024_Öberini_raw_webpage.csv')
-      .then(response => response.text())
-      .then(data => {
-        var rows = data.split('\n');
-        var table = document.getElementById("mountainsTable").getElementsByTagName('tbody')[0];
-        for (var i = 0; i < rows.length; i++) {
-          var rowData = rows[i].split(',');
-          var row = table.insertRow(-1);
-          for (var j = 0; j < rowData.length; j++) {
-            var cell = row.insertCell(-1);
-            cell.textContent = rowData[j];
-          }
-        }
-        paginateTable(1);
-      })
-      .catch(error => console.error(error));
-  }
-
-  fetchCSV();
-</script>
+<footer>
+  <p>Contact us: contact@dogwebsite.com</p>
+</footer>
 
 </body>
 </html>
+
 
