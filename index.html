@@ -55,13 +55,13 @@
     <table id="gipfelbuchTable">
         <thead>
             <tr>
-                <th>Gipfel <input class="filter-input" type="text" id="filterGipfel"></th>
-                <th>Datum <input class="filter-input" type="text" id="filterDatum"></th>
-                <th>Wer <input class="filter-input" type="text" id="filterWer"></th>
-                <th>Route <input class="filter-input" type="text" id="filterRoute"></th>
-                <th>Notiz <input class="filter-input" type="text" id="filterNotiz"></th>
-                <th>Gipfelbuch <input class="filter-input" type="text" id="filterGipfelbuch"></th>
-                <th>Erfasste Jahre <input class="filter-input" type="text" id="filterErfassteJahre"></th>
+                <th onclick="sortTable(0)">Gipfel <input class="filter-input" type="text" id="filterGipfel"></th>
+                <th onclick="sortTable(1)">Datum <input class="filter-input" type="text" id="filterDatum"></th>
+                <th onclick="sortTable(2)">Wer <input class="filter-input" type="text" id="filterWer"></th>
+                <th onclick="sortTable(3)">Route <input class="filter-input" type="text" id="filterRoute"></th>
+                <th onclick="sortTable(4)">Notiz <input class="filter-input" type="text" id="filterNotiz"></th>
+                <th onclick="sortTable(5)">Gipfelbuch <input class="filter-input" type="text" id="filterGipfelbuch"></th>
+                <th onclick="sortTable(6)">Erfasste Jahre <input class="filter-input" type="text" id="filterErfassteJahre"></th>
             </tr>
         </thead>
         <tbody id="tableBody">
@@ -92,12 +92,6 @@
             })
             .catch(error => console.error('Error fetching CSV file:', error));
 
-        document.querySelectorAll('.filter-input').forEach(input => {
-            input.addEventListener('input', function() {
-                filterTable();
-            });
-        });
-
         function filterTable() {
             const filters = Array.from(document.querySelectorAll('.filter-input')).map(input => input.value.toUpperCase());
             const tableRows = document.getElementById('gipfelbuchTable').getElementsByTagName('tr');
@@ -114,6 +108,27 @@
                 tableRows[i].style.display = visible ? '' : 'none';
             }
         }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('gipfelbuchTable');
+            const rows = Array.from(table.rows).slice(1); // Exclude header row
+            const isNumeric = !isNaN(parseFloat(rows[0].cells[columnIndex].textContent.trim()));
+            rows.sort((a, b) => {
+                const aValue = a.cells[columnIndex].textContent.trim();
+                const bValue = b.cells[columnIndex].textContent.trim();
+                if (isNumeric) {
+                    return parseFloat(aValue) - parseFloat(bValue);
+                } else {
+                    return aValue.localeCompare(bValue);
+                }
+            });
+            const tableBody = table.getElementsByTagName('tbody')[0];
+            while (tableBody.firstChild) {
+                tableBody.removeChild(tableBody.firstChild);
+            }
+            rows.forEach(row => tableBody.appendChild(row));
+        }
     </script>
 </body>
 </html>
+
