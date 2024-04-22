@@ -55,13 +55,13 @@
     <table id="gipfelbuchTable">
         <thead>
             <tr>
-                <th>Gipfel <input class="filter-input" type="text" id="filterGipfel" onkeyup="filterColumn(0)"></th>
-                <th>Datum <input class="filter-input" type="text" id="filterDatum" onkeyup="filterColumn(1)"></th>
-                <th>Wer <input class="filter-input" type="text" id="filterWer" onkeyup="filterColumn(2)"></th>
-                <th>Route <input class="filter-input" type="text" id="filterRoute" onkeyup="filterColumn(3)"></th>
-                <th>Notiz <input class="filter-input" type="text" id="filterNotiz" onkeyup="filterColumn(4)"></th>
-                <th>Gipfelbuch <input class="filter-input" type="text" id="filterGipfelbuch" onkeyup="filterColumn(5)"></th>
-                <th>Erfasste Jahre <input class="filter-input" type="text" id="filterErfassteJahre" onkeyup="filterColumn(6)"></th>
+                <th>Gipfel <input class="filter-input" type="text" id="filterGipfel"></th>
+                <th>Datum <input class="filter-input" type="text" id="filterDatum"></th>
+                <th>Wer <input class="filter-input" type="text" id="filterWer"></th>
+                <th>Route <input class="filter-input" type="text" id="filterRoute"></th>
+                <th>Notiz <input class="filter-input" type="text" id="filterNotiz"></th>
+                <th>Gipfelbuch <input class="filter-input" type="text" id="filterGipfelbuch"></th>
+                <th>Erfasste Jahre <input class="filter-input" type="text" id="filterErfassteJahre"></th>
             </tr>
         </thead>
         <tbody id="tableBody">
@@ -92,22 +92,28 @@
             })
             .catch(error => console.error('Error fetching CSV file:', error));
 
-        function filterColumn(index) {
-            const filterValue = document.getElementById(`filter${index}`).value.toUpperCase();
+        document.querySelectorAll('.filter-input').forEach(input => {
+            input.addEventListener('input', function() {
+                filterTable();
+            });
+        });
+
+        function filterTable() {
+            const filters = Array.from(document.querySelectorAll('.filter-input')).map(input => input.value.toUpperCase());
             const tableRows = document.getElementById('gipfelbuchTable').getElementsByTagName('tr');
             for (let i = 0; i < tableRows.length; i++) {
-                const tableData = tableRows[i].getElementsByTagName('td')[index];
-                if (tableData) {
-                    const cellValue = tableData.textContent || tableData.innerText;
-                    if (cellValue.toUpperCase().indexOf(filterValue) > -1) {
-                        tableRows[i].style.display = '';
-                    } else {
-                        tableRows[i].style.display = 'none';
+                const tableCells = tableRows[i].getElementsByTagName('td');
+                let visible = true;
+                for (let j = 0; j < tableCells.length && visible; j++) {
+                    const cellValue = tableCells[j].textContent || tableCells[j].innerText;
+                    const filterValue = filters[j];
+                    if (filterValue && cellValue.toUpperCase().indexOf(filterValue) === -1) {
+                        visible = false;
                     }
                 }
+                tableRows[i].style.display = visible ? '' : 'none';
             }
         }
     </script>
 </body>
 </html>
-
