@@ -17,9 +17,28 @@
         th {
             background-color: #f2f2f2;
         }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
+    <header>
+        <h1>Alpstein DB</h1>
+    </header>
+
     <h2>Gipfelbuch DB</h2>
     <table id="gipfelbuchTable">
         <thead>
@@ -37,6 +56,10 @@
             <!-- Data will be dynamically populated here -->
         </tbody>
     </table>
+
+    <footer>
+        &copy; Andi Koller, 2024
+    </footer>
 
     <script>
         fetch('2024_Öberini_raw_webpage.csv')
