@@ -23,7 +23,7 @@
 
 <h2>Mountain Table</h2>
 
-<table>
+<table id="mountainTable">
     <thead>
         <tr>
             <th>Gipfel</th>
@@ -36,28 +36,39 @@
         </tr>
     </thead>
     <tbody>
-        <!-- Add your table rows here -->
-        <tr>
-            <td>Mountain 1</td>
-            <td>2024-04-22</td>
-            <td>John Doe</td>
-            <td>Route 1</td>
-            <td>Note 1</td>
-            <td>Yes</td>
-            <td>5</td>
-        </tr>
-        <tr>
-            <td>Mountain 2</td>
-            <td>2024-04-23</td>
-            <td>Jane Smith</td>
-            <td>Route 2</td>
-            <td>Note 2</td>
-            <td>No</td>
-            <td>3</td>
-        </tr>
-        <!-- Add more rows as needed -->
+        <!-- Data will be dynamically populated here -->
     </tbody>
 </table>
 
+<script>
+    // Function to fetch and parse CSV data
+    function fetchCSV(url, callback) {
+        fetch(url)
+            .then(response => response.text())
+            .then(text => {
+                const rows = text.split('\n').map(row => row.split(','));
+                callback(rows);
+            });
+    }
+
+    // Function to populate table with data
+    function populateTable(data) {
+        const tableBody = document.querySelector('#mountainTable tbody');
+        data.forEach(row => {
+            const tr = document.createElement('tr');
+            row.forEach(cell => {
+                const td = document.createElement('td');
+                td.textContent = cell;
+                tr.appendChild(td);
+            });
+            tableBody.appendChild(tr);
+        });
+    }
+
+    // Fetch and populate data
+    fetchCSV('2024_Öberini_raw_webpage.csv', populateTable);
+</script>
+
 </body>
 </html>
+
