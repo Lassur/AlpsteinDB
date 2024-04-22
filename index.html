@@ -44,6 +44,20 @@
             box-sizing: border-box;
             padding: 5px;
         }
+        .pagination {
+            margin-top: 10px;
+            text-align: center;
+        }
+        .pagination button {
+            cursor: pointer;
+            background-color: #f2f2f2;
+            border: none;
+            padding: 5px 10px;
+            margin: 0 5px;
+        }
+        .pagination button:hover {
+            background-color: #ddd;
+        }
     </style>
 </head>
 <body>
@@ -52,83 +66,123 @@
     </header>
 
     <h2>Gipfelbuch DB</h2>
+    <div id="filters">
+        <input class="filter-input" type="text" id="filterGipfel" placeholder="Filter Gipfel">
+        <input class="filter-input" type="text" id="filterDatum" placeholder="Filter Datum">
+        <input class="filter-input" type="text" id="filterWer" placeholder="Filter Wer">
+        <input class="filter-input" type="text" id="filterRoute" placeholder="Filter Route">
+        <input class="filter-input" type="text" id="filterNotiz" placeholder="Filter Notiz">
+        <input class="filter-input" type="text" id="filterGipfelbuch" placeholder="Filter Gipfelbuch">
+        <input class="filter-input" type="text" id="filterErfassteJahre" placeholder="Filter Erfasste Jahre">
+        <button onclick="applyFilters()">Confirm</button>
+    </div>
     <table id="gipfelbuchTable">
         <thead>
             <tr>
-                <th onclick="sortTable(0)">Gipfel <input class="filter-input" type="text" id="filterGipfel"></th>
-                <th onclick="sortTable(1)">Datum <input class="filter-input" type="text" id="filterDatum"></th>
-                <th onclick="sortTable(2)">Wer <input class="filter-input" type="text" id="filterWer"></th>
-                <th onclick="sortTable(3)">Route <input class="filter-input" type="text" id="filterRoute"></th>
-                <th onclick="sortTable(4)">Notiz <input class="filter-input" type="text" id="filterNotiz"></th>
-                <th onclick="sortTable(5)">Gipfelbuch <input class="filter-input" type="text" id="filterGipfelbuch"></th>
-                <th onclick="sortTable(6)">Erfasste Jahre <input class="filter-input" type="text" id="filterErfassteJahre"></th>
+                <th>Gipfel</th>
+                <th>Datum</th>
+                <th>Wer</th>
+                <th>Route</th>
+                <th>Notiz</th>
+                <th>Gipfelbuch</th>
+                <th>Erfasste Jahre</th>
             </tr>
         </thead>
         <tbody id="tableBody">
             <!-- Data will be dynamically populated here -->
+            <tr><td colspan="7">No data found</td></tr>
         </tbody>
     </table>
+
+    <div id="pagination" class="pagination">
+        <button onclick="prevPage()">Prev</button>
+        <button onclick="nextPage()">Next</button>
+    </div>
 
     <footer>
         &copy; Andi Koller, 2024
     </footer>
 
     <script>
+        const rowsPerPage = 20;
+        let currentPage = 1;
+        let filteredData = [];
+
         fetch('2024_Öberini_raw_webpage.csv')
             .then(response => response.text())
             .then(data => {
                 const rows = data.split('\n').slice(1); // Exclude header row
-                const tableBody = document.getElementById('tableBody');
-                rows.forEach(row => {
-                    const columns = row.split(',');
-                    const newRow = document.createElement('tr');
-                    columns.forEach(column => {
-                        const newCell = document.createElement('td');
-                        newCell.textContent = column;
-                        newRow.appendChild(newCell);
-                    });
-                    tableBody.appendChild(newRow);
-                });
+                filteredData = rows.map(row => row.split(','));
             })
             .catch(error => console.error('Error fetching CSV file:', error));
 
-        function filterTable() {
-            const filters = Array.from(document.querySelectorAll('.filter-input')).map(input => input.value.toUpperCase());
-            const tableRows = document.getElementById('gipfelbuchTable').getElementsByTagName('tr');
-            for (let i = 0; i < tableRows.length; i++) {
-                const tableCells = tableRows[i].getElementsByTagName('td');
-                let visible = true;
-                for (let j = 0; j < tableCells.length && visible; j++) {
-                    const cellValue = tableCells[j].textContent || tableCells[j].innerText;
-                    const filterValue = filters[j];
-                    if (filterValue && cellValue.toUpperCase().indexOf(filterValue) === -1) {
-                        visible = false;
-                    }
-                }
-                tableRows[i].style.display = visible ? '' : 'none';
+        function applyFilters() {
+            const filters = Array.from(document.querySelectorAll('.filter-input')).map(input => input.value.trim().toUpperCase());
+            filteredData = filters.reduce((filteredRows, filter, index) => {
+                return filteredRows.filter(row => row[index].toUpperCase().includes(filter));
+            }, filteredData);
+            currentPage = 1;
+            renderTable();
+        }
+
+        function renderTable() {
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+            for (let i = startIndex; i < Math.min(endIndex, filteredData.length); i++) {
+                const row = filteredData[i];
+                const newRow = document.createElement('tr');
+                row.forEach(cellValue => {
+                    const newCell = document.createElement('td');
+                    newCell.textContent = cellValue;
+                    newRow.appendChild(newCell);
+                });
+                tableBody.appendChild(newRow);
+            }
+            if (filteredData.length === 0) {
+                const newRow = document.createElement('tr');
+                const newCell = document.createElement('td');
+                newCell.setAttribute('colspan', '7');
+                newCell.textContent = 'No data found';
+                newRow.appendChild(newCell);
+                tableBody.appendChild(newRow);
+            }
+            updatePagination();
+        }
+
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            if (currentPage > 1) {
+                const prevButton = document.createElement('button');
+                prevButton.textContent = 'Prev';
+                prevButton.onclick = prevPage;
+                pagination.appendChild(prevButton);
+            }
+            if (currentPage < totalPages) {
+                const nextButton = document.createElement('button');
+                nextButton.textContent = 'Next';
+                nextButton.onclick = nextPage;
+                pagination.appendChild(nextButton);
             }
         }
 
-        function sortTable(columnIndex) {
-            const table = document.getElementById('gipfelbuchTable');
-            const rows = Array.from(table.rows).slice(1); // Exclude header row
-            const isNumeric = !isNaN(parseFloat(rows[0].cells[columnIndex].textContent.trim()));
-            rows.sort((a, b) => {
-                const aValue = a.cells[columnIndex].textContent.trim();
-                const bValue = b.cells[columnIndex].textContent.trim();
-                if (isNumeric) {
-                    return parseFloat(aValue) - parseFloat(bValue);
-                } else {
-                    return aValue.localeCompare(bValue);
-                }
-            });
-            const tableBody = table.getElementsByTagName('tbody')[0];
-            while (tableBody.firstChild) {
-                tableBody.removeChild(tableBody.firstChild);
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
             }
-            rows.forEach(row => tableBody.appendChild(row));
+        }
+
+        function nextPage() {
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable();
+            }
         }
     </script>
 </body>
 </html>
-
