@@ -3,67 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mountain Table</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.css">
+    <title>Gipfelbuch DB</title>
     <style>
-        /* Custom styles */
-        #mountainTable_wrapper {
-            overflow-x: auto;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
 <body>
+    <h2>Gipfelbuch DB</h2>
+    <table id="gipfelbuchTable">
+        <thead>
+            <tr>
+                <th>Gipfel</th>
+                <th>Datum</th>
+                <th>Wer</th>
+                <th>Route</th>
+                <th>Notiz</th>
+                <th>Gipfelbuch</th>
+                <th>Erfasste Jahre</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Data will be dynamically populated here -->
+        </tbody>
+    </table>
 
-<h2>Mountain Table</h2>
-
-<table id="mountainTable" class="display">
-    <thead>
-        <tr>
-            <th>Gipfel</th>
-            <th>Datum</th>
-            <th>Wer</th>
-            <th>Route</th>
-            <th>Notiz</th>
-            <th>Gipfelbuch</th>
-            <th>Erfasste Jahre</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Data will be dynamically populated here -->
-    </tbody>
-</table>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.js"></script>
-<script>
-    // Function to fetch and parse CSV data
-    function fetchCSV(url, callback) {
-        fetch(url)
+    <script>
+        fetch('2024_Öberini_raw_webpage.csv')
             .then(response => response.text())
-            .then(text => {
-                const rows = text.split('\n').map(row => row.split(','));
-                callback(rows);
-            });
-    }
-
-    // Function to populate table with data
-    function populateTable(data) {
-        const table = $('#mountainTable').DataTable({
-            data: data.slice(1), // Exclude header row
-            columns: data[0].map(column => ({ title: column })),
-            scrollY: 'calc(100vh - 200px)', // Adjust height
-            scrollX: true,
-            paging: true,
-            pageLength: 100,
-            ordering: true,
-            fixedHeader: true
-        });
-    }
-
-    // Fetch and populate data
-    fetchCSV('2024_Öberini_raw_webpage.csv', populateTable);
-</script>
-
+            .then(data => {
+                const rows = data.split('\n').slice(1); // Exclude header row
+                const tableBody = document.getElementById('tableBody');
+                rows.forEach(row => {
+                    const columns = row.split(',');
+                    const newRow = document.createElement('tr');
+                    columns.forEach(column => {
+                        const newCell = document.createElement('td');
+                        newCell.textContent = column;
+                        newRow.appendChild(newCell);
+                    });
+                    tableBody.appendChild(newRow);
+                });
+            })
+            .catch(error => console.error('Error fetching CSV file:', error));
+    </script>
 </body>
 </html>
-
