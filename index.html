@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,13 +57,13 @@
                 <th>Erfasste Jahre</th>
             </tr>
             <tr>
-                <th><input type="text" placeholder="Search Gipfel"></th>
-                <th><input type="text" placeholder="Search Datum"></th>
-                <th><input type="text" placeholder="Search Wer"></th>
-                <th><input type="text" placeholder="Search Route"></th>
-                <th><input type="text" placeholder="Search Notiz"></th>
-                <th><input type="text" placeholder="Search Gipfelbuch"></th>
-                <th><input type="text" placeholder="Search Erfasste Jahre"></th>
+                <th><input type="text" placeholder="Gipfel suchen"></th>
+                <th><input type="text" placeholder="Datum suchen"></th>
+                <th><input type="text" placeholder="Wer suchen"></th>
+                <th><input type="text" placeholder="Route suchen"></th>
+                <th><input type="text" placeholder="Notiz suchen"></th>
+                <th><input type="text" placeholder="Gipfelbuch suchen"></th>
+                <th><input type="text" placeholder="Erfasste Jahre suchen"></th>
             </tr>
         </thead>
         <tbody>
@@ -94,6 +94,21 @@
                 });
 
                 const table = $('#peaks-table').DataTable({
+                    language: {
+                        search: "Suchen:",
+                        lengthMenu: "Zeige _MENU_ Einträge",
+                        info: "Zeige _START_ bis _END_ von _TOTAL_ Einträgen",
+                        infoEmpty: "Zeige 0 bis 0 von 0 Einträgen",
+                        infoFiltered: "(gefiltert von _MAX_ Gesamteinträgen)",
+                        paginate: {
+                            first: "Erste",
+                            last: "Letzte",
+                            next: "Nächste",
+                            previous: "Vorherige"
+                        },
+                        zeroRecords: "Keine passenden Einträge gefunden",
+                        emptyTable: "Keine Daten in der Tabelle vorhanden",
+                    },
                     orderCellsTop: true,
                     fixedHeader: true
                 });
