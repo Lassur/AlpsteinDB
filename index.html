@@ -14,6 +14,9 @@
             width: 100%;
             box-sizing: border-box;
         }
+        .dataTables_filter {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -70,8 +73,10 @@
                 const table = $('#peaks-table').DataTable({
                     columnDefs: [{
                         targets: 'no-sort',
-                        orderable: false
-                    }]
+                        orderable: true // Retain sorting icons on the headers
+                    }],
+                    orderCellsTop: true, // Ensure the sorting icons appear on top
+                    fixedHeader: true // Keep header fixed when scrolling
                 });
 
                 // Apply the search
@@ -90,3 +95,4 @@
     </script>
 </body>
 </html>
+
