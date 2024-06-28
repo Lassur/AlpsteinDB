@@ -47,6 +47,11 @@
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function() {
+            // Prevent sorting when clicking on the search input boxes
+            $('#peaks-table thead tr:eq(1) th').each(function() {
+                $(this).attr('class', 'no-sort');
+            });
+
             $.get('2024_Öberini_raw_webpage.csv', function(data) {
                 const lines = data.split('\n');
                 const rows = lines.slice(1);
@@ -62,11 +67,16 @@
                     }
                 });
 
-                const table = $('#peaks-table').DataTable();
+                const table = $('#peaks-table').DataTable({
+                    columnDefs: [{
+                        targets: 'no-sort',
+                        orderable: false
+                    }]
+                });
 
                 // Apply the search
-                $('#peaks-table thead tr:eq(1) th').each(function (i) {
-                    $('input', this).on('keyup change clear', function () {
+                $('#peaks-table thead tr:eq(1) th').each(function(i) {
+                    $('input', this).on('keyup change clear', function() {
                         if (table.column(i).search() !== this.value) {
                             table
                                 .column(i)
