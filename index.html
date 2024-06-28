@@ -26,6 +26,8 @@
                 <th>Wer</th>
                 <th>Route</th>
                 <th>Notiz</th>
+                <th>Gipfelbuch</th>
+                <th>Erfasste Jahre</th>
             </tr>
             <tr>
                 <th><input type="text" placeholder="Search Gipfel"></th>
@@ -33,6 +35,8 @@
                 <th><input type="text" placeholder="Search Wer"></th>
                 <th><input type="text" placeholder="Search Route"></th>
                 <th><input type="text" placeholder="Search Notiz"></th>
+                <th><input type="text" placeholder="Search Gipfelbuch"></th>
+                <th><input type="text" placeholder="Search Erfasste Jahre"></th>
             </tr>
         </thead>
         <tbody>
@@ -49,21 +53,25 @@
 
                 rows.forEach(row => {
                     const cells = row.split(',');
-                    const tr = $('<tr></tr>');
-                    cells.forEach(cell => {
-                        tr.append($('<td></td>').text(cell));
-                    });
-                    $('#peaks-table tbody').append(tr);
+                    if (cells.length === 7) {
+                        const tr = $('<tr></tr>');
+                        cells.forEach(cell => {
+                            tr.append($('<td></td>').text(cell.trim()));
+                        });
+                        $('#peaks-table tbody').append(tr);
+                    }
                 });
 
                 const table = $('#peaks-table').DataTable();
 
                 // Apply the search
-                table.columns().every(function() {
-                    const that = this;
-                    $('input', this.header()).on('keyup change clear', function() {
-                        if (that.search() !== this.value) {
-                            that.search(this.value).draw();
+                $('#peaks-table thead tr:eq(1) th').each(function (i) {
+                    $('input', this).on('keyup change clear', function () {
+                        if (table.column(i).search() !== this.value) {
+                            table
+                                .column(i)
+                                .search(this.value)
+                                .draw();
                         }
                     });
                 });
