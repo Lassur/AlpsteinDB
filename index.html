@@ -3,80 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gipfelbuch DB</title>
+    <title>Mountain Peaks Database</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
         th, td {
-            border: 1px solid black;
-            padding: 8px;
+            padding: 10px;
             text-align: left;
         }
-        th {
-            background-color: #f2f2f2;
-            position: sticky;
-            top: 0;
-        }
-        thead th {
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-        .filter-input {
+        input[type="search"] {
             width: 100%;
             box-sizing: border-box;
-            padding: 5px;
-        }
-        .pagination {
-            margin-top: 10px;
-            text-align: center;
-        }
-        .pagination button {
-            cursor: pointer;
-            background-color: #f2f2f2;
-            border: none;
-            padding: 5px 10px;
-            margin: 0 5px;
-        }
-        .pagination button:hover {
-            background-color: #ddd;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Alpstein DB</h1>
-    </header>
-
-    <h2>Gipfelbuch DB</h2>
-    <div id="filters">
-        <input class="filter-input" type="text" id="filterGipfel" placeholder="Filter Gipfel">
-        <input class="filter-input" type="text" id="filterDatum" placeholder="Filter Datum">
-        <input class="filter-input" type="text" id="filterWer" placeholder="Filter Wer">
-        <input class="filter-input" type="text" id="filterRoute" placeholder="Filter Route">
-        <input class="filter-input" type="text" id="filterNotiz" placeholder="Filter Notiz">
-        <input class="filter-input" type="text" id="filterGipfelbuch" placeholder="Filter Gipfelbuch">
-        <input class="filter-input" type="text" id="filterErfassteJahre" placeholder="Filter Erfasste Jahre">
-        <button onclick="applyFilters()">Confirm</button>
-    </div>
-    <table id="gipfelbuchTable">
+    <h1>Mountain Peaks Database</h1>
+    <table id="peaks-table" class="display">
         <thead>
             <tr>
                 <th>Gipfel</th>
@@ -84,105 +26,49 @@
                 <th>Wer</th>
                 <th>Route</th>
                 <th>Notiz</th>
-                <th>Gipfelbuch</th>
-                <th>Erfasste Jahre</th>
+            </tr>
+            <tr>
+                <th><input type="text" placeholder="Search Gipfel"></th>
+                <th><input type="text" placeholder="Search Datum"></th>
+                <th><input type="text" placeholder="Search Wer"></th>
+                <th><input type="text" placeholder="Search Route"></th>
+                <th><input type="text" placeholder="Search Notiz"></th>
             </tr>
         </thead>
-        <tbody id="tableBody">
-            <!-- Data will be dynamically populated here -->
-            <tr><td colspan="7">No data found</td></tr>
+        <tbody>
         </tbody>
     </table>
 
-    <div id="pagination" class="pagination">
-        <button onclick="prevPage()">Prev</button>
-        <button onclick="nextPage()">Next</button>
-    </div>
-
-    <footer>
-        &copy; Andi Koller, 2024
-    </footer>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script>
-        const rowsPerPage = 20;
-        let currentPage = 1;
-        let filteredData = [];
+        $(document).ready(function() {
+            $.get('2024_Öberini_raw_webpage.csv', function(data) {
+                const lines = data.split('\n');
+                const rows = lines.slice(1);
 
-        fetch('2024_Öberini_raw_webpage.csv')
-            .then(response => response.text())
-            .then(data => {
-                const rows = data.split('\n').slice(1); // Exclude header row
-                filteredData = rows.map(row => row.split(','));
-            })
-            .catch(error => console.error('Error fetching CSV file:', error));
-
-        function applyFilters() {
-            const filters = Array.from(document.querySelectorAll('.filter-input')).map(input => input.value.trim().toUpperCase());
-            filteredData = filters.reduce((filteredRows, filter, index) => {
-                return filteredRows.filter(row => row[index].toUpperCase().includes(filter));
-            }, filteredData);
-            currentPage = 1;
-            renderTable();
-        }
-
-        function renderTable() {
-            const startIndex = (currentPage - 1) * rowsPerPage;
-            const endIndex = startIndex + rowsPerPage;
-            const tableBody = document.getElementById('tableBody');
-            tableBody.innerHTML = '';
-            for (let i = startIndex; i < Math.min(endIndex, filteredData.length); i++) {
-                const row = filteredData[i];
-                const newRow = document.createElement('tr');
-                row.forEach(cellValue => {
-                    const newCell = document.createElement('td');
-                    newCell.textContent = cellValue;
-                    newRow.appendChild(newCell);
+                rows.forEach(row => {
+                    const cells = row.split(',');
+                    const tr = $('<tr></tr>');
+                    cells.forEach(cell => {
+                        tr.append($('<td></td>').text(cell));
+                    });
+                    $('#peaks-table tbody').append(tr);
                 });
-                tableBody.appendChild(newRow);
-            }
-            if (filteredData.length === 0) {
-                const newRow = document.createElement('tr');
-                const newCell = document.createElement('td');
-                newCell.setAttribute('colspan', '7');
-                newCell.textContent = 'No data found';
-                newRow.appendChild(newCell);
-                tableBody.appendChild(newRow);
-            }
-            updatePagination();
-        }
 
-        function updatePagination() {
-            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-            const pagination = document.getElementById('pagination');
-            pagination.innerHTML = '';
-            if (currentPage > 1) {
-                const prevButton = document.createElement('button');
-                prevButton.textContent = 'Prev';
-                prevButton.onclick = prevPage;
-                pagination.appendChild(prevButton);
-            }
-            if (currentPage < totalPages) {
-                const nextButton = document.createElement('button');
-                nextButton.textContent = 'Next';
-                nextButton.onclick = nextPage;
-                pagination.appendChild(nextButton);
-            }
-        }
+                const table = $('#peaks-table').DataTable();
 
-        function prevPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                renderTable();
-            }
-        }
-
-        function nextPage() {
-            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderTable();
-            }
-        }
+                // Apply the search
+                table.columns().every(function() {
+                    const that = this;
+                    $('input', this.header()).on('keyup change clear', function() {
+                        if (that.search() !== this.value) {
+                            that.search(this.value).draw();
+                        }
+                    });
+                });
+            });
+        });
     </script>
 </body>
 </html>
