@@ -3,129 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gipfelbücher</title>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        header, footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #333;
-            color: white;
-            margin-bottom: 20px;
-        }
-        footer {
-            margin-top: 20px;
-        }
-        table.dataTable thead th {
-            position: sticky;
-            top: 0;
-            background-color: white;
-            z-index: 10;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-            font-size: 12px; /* Adjusted font size */
-        }
-        input[type="search"] {
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .dataTables_filter {
-            display: none;
-        }
-    </style>
+    <title>Alpstein DB</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <h1>Alpstein DB</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="gipfelbuecher.html">Gipfelbücher</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <h2>Gipfelbücher</h2>
-    <table id="peaks-table" class="display">
-        <thead>
-            <tr>
-                <th>Gipfel</th>
-                <th>Datum</th>
-                <th>Wer</th>
-                <th>Route</th>
-                <th>Notiz</th>
-                <th>Gipfelbuch</th>
-                <th>Erfasste Jahre</th>
-            </tr>
-            <tr>
-                <th><input type="text" placeholder="Gipfel suchen"></th>
-                <th><input type="text" placeholder="Datum suchen"></th>
-                <th><input type="text" placeholder="Wer suchen"></th>
-                <th><input type="text" placeholder="Route suchen"></th>
-                <th><input type="text" placeholder="Notiz suchen"></th>
-                <th><input type="text" placeholder="Gipfelbuch suchen"></th>
-                <th><input type="text" placeholder="Erfasste Jahre suchen"></th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <main>
+        <h2>Willkommen bei Alpstein DB</h2>
+        <p>Hier finden Sie Informationen und Daten zu Gipfelbüchern und Bergtouren im Alpstein. Nutzen Sie die Navigation, um zu den Gipfelbüchern zu gelangen und detaillierte Informationen zu durchsuchen.</p>
+    </main>
 
     <footer>
         © 2024, Andreas Koller, Appenzell
     </footer>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $.get('2024_Öberini_raw_webpage.csv', function(data) {
-                const lines = data.split('\n');
-                const rows = lines.slice(1);
-
-                rows.forEach(row => {
-                    const cells = row.split(',');
-                    if (cells.length === 7) {
-                        const tr = $('<tr></tr>');
-                        cells.forEach(cell => {
-                            tr.append($('<td></td>').text(cell.trim()));
-                        });
-                        $('#peaks-table tbody').append(tr);
-                    }
-                });
-
-                const table = $('#peaks-table').DataTable({
-                    language: {
-                        search: "Suchen:",
-                        lengthMenu: "Zeige _MENU_ Einträge",
-                        info: "Zeige _START_ bis _END_ von _TOTAL_ Einträgen",
-                        infoEmpty: "Zeige 0 bis 0 von 0 Einträgen",
-                        infoFiltered: "(gefiltert von _MAX_ Gesamteinträgen)",
-                        paginate: {
-                            first: "Erste",
-                            last: "Letzte",
-                            next: "Nächste",
-                            previous: "Vorherige"
-                        },
-                        zeroRecords: "Keine passenden Einträge gefunden",
-                        emptyTable: "Keine Daten in der Tabelle vorhanden",
-                    },
-                    orderCellsTop: true,
-                    fixedHeader: true
-                });
-
-                // Apply the search
-                $('#peaks-table thead tr:eq(1) th').each(function(i) {
-                    $('input', this).on('keyup change clear', function() {
-                        if (table.column(i).search() !== this.value) {
-                            table
-                                .column(i)
-                                .search(this.value)
-                                .draw();
-                        }
-                    });
-                });
-            });
-        });
-    </script>
 </body>
 </html>
