@@ -33,7 +33,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.js"></script>
     <script>
         $(document).ready(function() {
-            $.get('2024_Öberini_raw_webpage.csv', function(data) {
+            $.ajax({
+                url: '2024_Öberini_raw_webpage.csv',
+                dataType: 'text',
+            }).done(function(data) {
+                console.log("CSV Data Loaded");
                 const lines = data.split('\n');
                 const headers = lines[0].split(',');
                 const rows = lines.slice(1).map(line => line.split(','));
@@ -46,10 +50,14 @@
                     return obj;
                 });
 
+                console.log("Processed JSON Data:", jsonData);
+
                 $("#output").pivotUI(jsonData, {
                     rows: ["Gipfel"],
                     cols: ["Datum"]
                 });
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("Error loading CSV data: ", textStatus, errorThrown);
             });
         });
     </script>
