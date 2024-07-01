@@ -6,28 +6,6 @@
     <title>Unfälle - Alpstein DB</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
-    <style>
-        .expandable {
-            max-height: 4.5em; /* Limit to 3 lines */
-            overflow: hidden;
-            position: relative;
-        }
-        .expandable::after {
-            content: 'Mehr anzeigen...';
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: white;
-            cursor: pointer;
-            color: blue;
-        }
-        .expanded {
-            max-height: none;
-        }
-        .expanded::after {
-            content: 'Weniger anzeigen';
-        }
-    </style>
 </head>
 <body>
     <header>
@@ -79,22 +57,14 @@
                     header: true,
                     complete: function(results) {
                         var dataSet = results.data;
-                        var table = $('#unfaelle-table').DataTable({
+                        $('#unfaelle-table').DataTable({
                             data: dataSet,
                             columns: [
                                 { data: 'Jahr' },
                                 { data: 'Datum' },
                                 { data: 'Ort (Detail)' },
                                 { data: 'Zuordnung Gipfel/Alp' },
-                                {
-                                    data: 'Ereignis',
-                                    render: function(data, type, row) {
-                                        if (type === 'display') {
-                                            return `<div class="expandable">${data}</div>`;
-                                        }
-                                        return data;
-                                    }
-                                },
+                                { data: 'Ereignis' },
                                 { data: 'Aktivität' },
                                 { data: 'Unfallursache' },
                                 { data: '#Tote' },
@@ -117,10 +87,6 @@
                                 }
                             }
                         });
-
-                        $('#unfaelle-table tbody').on('click', 'td .expandable', function() {
-                            $(this).toggleClass('expanded');
-                        });
                     }
                 });
             });
@@ -128,4 +94,3 @@
     </script>
 </body>
 </html>
-
