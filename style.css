@@ -10,6 +10,33 @@ header, footer {
     margin-bottom: 20px;
 }
 
+header .logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+header .logo {
+    width: 120px; /* Adjust width as needed */
+    height: auto;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+header .logo.left {
+    left: 0;
+}
+
+header .logo.right {
+    right: 0;
+}
+
+h1 {
+    margin: 0 auto;
+}
+
 footer {
     margin-top: 20px;
 }
@@ -41,4 +68,3 @@ main {
 h2 {
     margin-top: 0;
 }
-
