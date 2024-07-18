@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiken - Alpstein DB</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.css">
+</head>
+<body>
+    <header>
+        <h1>Alpstein DB</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="gipfelbuecher.html">Gipfelbücher</a></li>
+                <li><a href="unfaelle.html">Unfälle</a></li>
+                <li><a href="statistics.html">Statistiken</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Statistiken</h2>
+        <div id="output"></div>
+    </main>
+
+    <footer>
+        © 2024, Andreas Koller, Appenzell
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: '2024_Öberini_raw_webpage.csv',
+                dataType: 'text',
+            }).done(function(data) {
+                console.log("CSV Data Loaded");
+                const lines = data.split('\n');
+                const headers = lines[0].split(',');
+                const rows = lines.slice(1).map(line => line.split(','));
+
+                const jsonData = rows.map(row => {
+                    let obj = {};
+                    headers.forEach((header, index) => {
+                        obj[header.trim()] = row[index].trim();
+                    });
+                    return obj;
+                });
+
+                console.log("Processed JSON Data:", jsonData);
+
+                $("#output").pivotUI(jsonData, {
+                    rows: ["Gipfel"],
+                    cols: ["Datum"]
+                });
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("Error loading CSV data: ", textStatus, errorThrown);
+            });
+        });
+    </script>
+</body>
+</html>
