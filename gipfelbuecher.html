@@ -174,12 +174,22 @@
 
                 // Apply the multi-select filter
                 $('.chosen-select').on('change', function() {
-                    const category = $(this).attr('id');
-                    const values = $(this).val();
-                    const searchValue = values ? values.join('|') : '';
-                    table.column($(`#${category}`).parent().index())
-                        .search(searchValue, true, false)
-                        .draw();
+                    let filters = {};
+
+                    // Collect all the filter values
+                    $('.chosen-select').each(function() {
+                        const column = $(this).attr('id');
+                        const values = $(this).val();
+                        if (values && values.length > 0) {
+                            filters[column] = values.join('|');
+                        }
+                    });
+
+                    // Apply the filter values to the DataTable
+                    $.each(filters, function(column, searchValue) {
+                        const columnIndex = $('#' + column).closest('th').index();
+                        table.column(columnIndex).search(searchValue, true, false).draw();
+                    });
                 });
             });
         });
