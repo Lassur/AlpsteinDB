@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Verzeichnis der Gipfelbücher</title>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+  <script src="https://cdn.datatables.net/plug-ins/1.13.4/i18n/de-DE.json"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; }
+    h1 { margin-bottom: 1rem; }
+    table { width: 100%; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="eintraege.html">Einträge</a>
+    <a href="charts.html">Charts</a>
+    <a href="buecher.html" class="active">Bücher</a>
+    <a href="karte.html">Karte</a>
+  </nav>
+  <h1>Verzeichnis der Gipfelbücher</h1>
+  <div class="legende" style="background:#f4f4f4; padding:1rem; margin-bottom:2rem; border-left:5px solid #003366;">
+<strong>Legende:</strong><br>
+<span class="tag" style="font-weight:bold;">❒</span> = Buch digitalisiert, aber noch nicht statistisch erfasst<br>
+<span class="tag" style="font-weight:bold;">×</span> = Buch nicht erfasst (z.B. unleserlich/verwittert/unvollständig)<br>
+<span class="tag" style="font-weight:bold;">?</span> = Zustand oder Archiv/Standort unklar<br>
+</div>
+
+  <table id="buecherTable" class="display nowrap">
+    <thead>
+      <tr>
+        <th>Gipfel</th>
+        <th>Ersteintrag</th>
+        <th>Letzteintrag</th>
+        <th>#Seiten / Zustand</th>
+        <th>Archiv</th>
+        <th>Datenbank</th>
+        <th>Weitere Info</th>
+      </tr>
+    </thead>
+  </table>
+
+  <script>
+    $(document).ready(function () {
+      fetch('books.json')
+        .then(res => res.json())
+        .then(data => {
+          $('#buecherTable').DataTable({
+            data: data,
+            columns: [
+              { data: 'Gipfel' },
+              { data: 'Ersteintrag' },
+              { data: 'Letzteintrag' },
+              { data: '#Seiten / Zustand' },
+              { data: 'Archiv' },
+              { data: 'Datenbank' },
+              { data: 'Weitere Info' }
+            ],
+            responsive: true,
+            dom: 'Bfrtip',
+            buttons: ['excel', 'print'],
+            language: {
+              url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/de-DE.json'
+            }
+          });
+        });
+    });
+  </script>
+</body>
+</html>
