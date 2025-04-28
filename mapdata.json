@@ -1,0 +1,863 @@
+[
+  {
+    "Gipfel": "Achter Kreuzberg",
+    "lat": 47.23683049394099,
+    "lng": 9.411703179133662,
+    "Eintraege": 1959,
+    "Radius": 20
+  },
+  {
+    "Gipfel": "Dritter Kreuzberg",
+    "lat": 47.24081855089001,
+    "lng": 9.419202211120018,
+    "Eintraege": 1,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Erster Kreuzberg",
+    "lat": 47.24366108894869,
+    "lng": 9.423317156926762,
+    "Eintraege": 6,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Fünfter Kreuzberg",
+    "lat": 47.238688771958685,
+    "lng": 9.41408903692453,
+    "Eintraege": 4,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Siebter Kreuzberg",
+    "lat": 47.23723922961055,
+    "lng": 9.41184602391014,
+    "Eintraege": 4,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Sechster Kreuzberg",
+    "lat": 47.23793886433016,
+    "lng": 9.41292781205952,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Vierter Kreuzberg",
+    "lat": 47.23918204401076,
+    "lng": 9.414973403937319,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Zweiter Kreuzberg",
+    "lat": 47.242215002171825,
+    "lng": 9.421970501097503,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Amboss (Hochhus)",
+    "lat": 47.25070427191231,
+    "lng": 9.437751549247078,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Hüser Ostgipfel",
+    "lat": 47.25657683807234,
+    "lng": 9.447459678803336,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Staubernkanzel",
+    "lat": 47.26029602366667,
+    "lng": 9.452017105406865,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Heierli Nadel",
+    "lat": 47.26851513409745,
+    "lng": 9.467646546453159,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Glogger",
+    "lat": 47.2722980510801,
+    "lng": 9.473855889541353,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Hoher Kasten",
+    "lat": 47.28369393896414,
+    "lng": 9.485025796722613,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Kamor",
+    "lat": 47.28971524265201,
+    "lng": 9.486704206534199,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Fähnern",
+    "lat": 47.31429134483112,
+    "lng": 9.480836126100929,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Ebenalp/Äscher",
+    "lat": 47.282886880868034,
+    "lng": 9.410666775856418,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Filderkopf",
+    "lat": 47.2798286557707,
+    "lng": 9.393250036487657,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Schäfler",
+    "lat": 47.27603090270398,
+    "lng": 9.390314103910494,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Altenalptürm Westgipfel",
+    "lat": 47.26977648333695,
+    "lng": 9.376070549505156,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Hängeten Ostgipfel",
+    "lat": 47.26765307469731,
+    "lng": 9.374275010850985,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Steckenberg",
+    "lat": 47.26749875742311,
+    "lng": 9.381663578187194,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Läden",
+    "lat": 47.273968525836956,
+    "lng": 9.384723719083665,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Neuenalpturm",
+    "lat": 47.283375441178876,
+    "lng": 9.395245824885437,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Öhrli",
+    "lat": 47.26545609998008,
+    "lng": 9.360667934376263,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Hühnerberg",
+    "lat": 47.259023712220646,
+    "lng": 9.34853818325349,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Hängeten Westgipfel",
+    "lat": 47.263206689586866,
+    "lng": 9.362657780900518,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Girenspitz",
+    "lat": 47.252082501171856,
+    "lng": 9.341233095409223,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Säntis",
+    "lat": 47.249388206146,
+    "lng": 9.34326314551756,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Altmann",
+    "lat": 47.23955854580444,
+    "lng": 9.37154397876381,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Nädliger",
+    "lat": 47.237853057797864,
+    "lng": 9.363526815665093,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Jöchliturm",
+    "lat": 47.23233007831862,
+    "lng": 9.357930648414795,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Moor Hauptgipfel",
+    "lat": 47.231531296227224,
+    "lng": 9.362152623559158,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Girespitz (Wildhauser)",
+    "lat": 47.23129070192946,
+    "lng": 9.366043127674837,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Zehespitz",
+    "lat": 47.22244695489003,
+    "lng": 9.356944100656598,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Schafbergwand",
+    "lat": 47.220772458586104,
+    "lng": 9.352668513526744,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Tristen",
+    "lat": 47.22443434085486,
+    "lng": 9.36408228114596,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Gulmen",
+    "lat": 47.2228165175392,
+    "lng": 9.384567663163967,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Gätterifirst Hauptgipfel",
+    "lat": 47.231675287960556,
+    "lng": 9.400488714890013,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Ruchbühl",
+    "lat": 47.233955460652126,
+    "lng": 9.381973217890522,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Roslenfirst",
+    "lat": 47.243653638114615,
+    "lng": 9.409478731481814,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Mutschen",
+    "lat": 47.23606150740006,
+    "lng": 9.406343465135393,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Wildhauser Schafberg",
+    "lat": 47.229424954824424,
+    "lng": 9.35205337308515,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Fählentürm Westgipfel",
+    "lat": 47.243155589806555,
+    "lng": 9.381180180121168,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+    {
+    "Gipfel": "Fählentürm Mittelgipfel",
+    "lat": 47.2438342625374,
+    "lng": 9.38299286819565,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+    {
+    "Gipfel": "Fählentürm Ostgipfel",
+    "lat": 47.2440279469483,
+    "lng": 9.3840814728485,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Fählenschafberg",
+    "lat": 47.247099375667986,
+    "lng": 9.391673110395866,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+    {
+    "Gipfel": "Fählenschafbergturm",
+    "lat": 47.2453967437479,
+    "lng": 9.38699119568551,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Nadlenspitz",
+    "lat": 47.24799990386113,
+    "lng": 9.39566037526796,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Rot Turm",
+    "lat": 47.25125198037598,
+    "lng": 9.401441392371073,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Freiheit",
+    "lat": 47.25231414706073,
+    "lng": 9.400129925227455,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Hundstein",
+    "lat": 47.25246274018499,
+    "lng": 9.402002049042485,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Fähnligipfel",
+    "lat": 47.25530355828522,
+    "lng": 9.412952684673273,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Neues Südplättli",
+    "lat": 47.2550442983114,
+    "lng": 9.414220073112455,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Widderalpstöck Mittelgipfel",
+    "lat": 47.25477304770452,
+    "lng": 9.409412590905212,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Widderalpstöck Hauptgipfel",
+    "lat": 47.25432787895809,
+    "lng": 9.406980083157475,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+    {
+    "Gipfel": "Widderalpstöck (P.2131)",
+    "lat": 47.2538893739764,
+    "lng": 9.4033998967117,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Freiheitturm Östlicher",
+    "lat": 47.25129790593277,
+    "lng": 9.396268306536943,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Freiheitturm Westlicher",
+    "lat": 47.250278520094476,
+    "lng": 9.39407972684423,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+    {
+    "Gipfel": "Furgglenzahn",
+    "lat": 47.254557573183,
+    "lng": 9.43904499012549,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Wagenlückenspitz",
+    "lat": 47.25034116707353,
+    "lng": 9.359168595036694,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Rossmad Ostgipfel",
+    "lat": 47.256568632052094,
+    "lng": 9.374530667552925,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Rossmad Mittelgipfel",
+    "lat": 47.253228359673805,
+    "lng": 9.367554442190876,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Marwees (P.2055)",
+    "lat": 47.26130690651691,
+    "lng": 9.403963747785482,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Marwees (P.1991)",
+    "lat": 47.264369922095604,
+    "lng": 9.415206197036241,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Westliche Dreifaltigkeit",
+    "lat": 47.26217707361888,
+    "lng": 9.420077775336214,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Östliche Dreifaltigkeit",
+    "lat": 47.26308497915894,
+    "lng": 9.422358775431961,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Mittlere Dreifaltigkeit",
+    "lat": 47.262757126982024,
+    "lng": 9.4217778651278,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Föhrenkante",
+    "lat": 47.26318079237873,
+    "lng": 9.425246977685832,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Bogartenfirst",
+    "lat": 47.266736191816534,
+    "lng": 9.42656269134272,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Alp Sigel (P.1768)",
+    "lat": 47.27324834761981,
+    "lng": 9.435901931777524,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Alp Sigel (P.1738)",
+    "lat": 47.278529077331086,
+    "lng": 9.439358646941248,
+    "Eintraege": 85,
+    "Radius": 7
+  },
+  {
+    "Gipfel": "Stöllen",
+    "lat": 47.22562453123438,
+    "lng": 9.292100801979867,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Silberplatte",
+    "lat": 47.23995668996023,
+    "lng": 9.316067941134959,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Scherenspitzen",
+    "lat": 47.229708622301374,
+    "lng": 9.303928043250965,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Gamschopf",
+    "lat": 47.2305058046556,
+    "lng": 9.304531241088181,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Stooss",
+    "lat": 47.2343398072629,
+    "lng": 9.314181833175182,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Lütispitz",
+    "lat": 47.222919065370995,
+    "lng": 9.283318448478182,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Neuenalpspitz",
+    "lat": 47.2076659518108,
+    "lng": 9.25182556510933,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Gmeinenwishöchi",
+    "lat": 47.215696849440484,
+    "lng": 9.258858853291608,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Grenzchopf",
+    "lat": 47.247100770562255,
+    "lng": 9.323968321288472,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Grauchopf",
+    "lat": 47.24960184806908,
+    "lng": 9.332362815048286,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Hundstei",
+    "lat": 47.23884516735246,
+    "lng": 9.339450568602052,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Gir",
+    "lat": 47.24440013163601,
+    "lng": 9.338268120150092,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Schofwisspitz",
+    "lat": 47.22548089831304,
+    "lng": 9.296212134792304,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Schwarzchopf",
+    "lat": 47.22871545869634,
+    "lng": 9.303237189848783,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Mutteliwand",
+    "lat": 47.224213900230836,
+    "lng": 9.301192027486477,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Unghüür",
+    "lat": 47.22566415364539,
+    "lng": 9.30400411034196,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Seealpseeturm",
+    "lat": 47.270518109029815,
+    "lng": 9.396162950511254,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Leiterfeldturm",
+    "lat": 47.264289157851145,
+    "lng": 9.378657350245517,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Scherenturm",
+    "lat": 47.22967666764949,
+    "lng": 9.303301247488319,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Kluckerplatte",
+    "lat": 47.241906317387375,
+    "lng": 9.32021748339695,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Grüehorn",
+    "lat": 47.243337858197,
+    "lng": 9.318939333674578,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Lisengrat/Wisswand",
+    "lat": 47.24415825974085,
+    "lng": 9.354613608162955,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Fliskopf",
+    "lat": 47.24103196836191,
+    "lng": 9.367636112479792,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Rässegg",
+    "lat": 47.23862060148831,
+    "lng": 9.373439087421119,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Chreialpfirst",
+    "lat": 47.23728494746865,
+    "lng": 9.397579541465863,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+    {
+    "Gipfel": "Chreialpfirst (P.2099)",
+    "lat": 47.2354044487224,
+    "lng": 9.38790033447374,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Kirchli",
+    "lat": 47.253554880921016,
+    "lng": 9.442131283193588,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Hüser Westgipfel",
+    "lat": 47.25563135987097,
+    "lng": 9.445643866509185,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Kleine Hüser",
+    "lat": 47.2589746242921,
+    "lng": 9.450262253158463,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Baritschchopf",
+    "lat": 47.28013154109501,
+    "lng": 9.480185887421053,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Erster Silberplattenkopf",
+    "lat": 47.23629222400678,
+    "lng": 9.314097145201938,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Zweiter Silberplattenkopf",
+    "lat": 47.23718263788735,
+    "lng": 9.313823117257584,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Japanischer Turm",
+    "lat": 47.23790416201633,
+    "lng": 9.314168666622454,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Vierter Silberplattenkopf",
+    "lat": 47.23889735564657,
+    "lng": 9.314666044827334,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Fünfter Silberplattenkopf",
+    "lat": 47.23919288953823,
+    "lng": 9.314700599841869,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Sechster Silberplattenkopf",
+    "lat": 47.23933322400675,
+    "lng": 9.315138182137055,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Altenalptürm Ostgipfel",
+    "lat": 47.27160096325202,
+    "lng": 9.380372675475053,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Altenalptürm Mittelgipfel",
+    "lat": 47.27073987722519,
+    "lng": 9.378468378457693,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Bogartenmannli",
+    "lat": 47.26557080711482,
+    "lng": 9.423595532500888,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Höchnideri",
+    "lat": 47.26079467204966,
+    "lng": 9.353576656595683,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Schwarzchopf (P.1798)",
+    "lat": 47.219556041810684,
+    "lng": 9.285231424150357,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Staubernfirst",
+    "lat": 47.26338179041289,
+    "lng": 9.457796834920801,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Kalberer",
+    "lat": 47.28001960626703,
+    "lng": 9.397059048788645,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Zisler",
+    "lat": 47.278121199844804,
+    "lng": 9.402075810486528,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Gätterifirst P.2085",
+    "lat": 47.22948574805932,
+    "lng": 9.397794704758725,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Gätterifirst P.2046",
+    "lat": 47.22830951303114,
+    "lng": 9.395127986553439,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Gätterifirst P.2050",
+    "lat": 47.226418979472925,
+    "lng": 9.390998773753662,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Forscherstein",
+    "lat": 47.290281947231584,
+    "lng": 9.429015733363192,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Horst",
+    "lat": 47.24791288844331,
+    "lng": 9.37344777445216,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+    {
+    "Gipfel": "Bötzelchopf",
+    "lat": 47.254655859427,
+    "lng": 9.39431085317513,
+    "Eintraege": 0,
+    "Radius": 6
+  },
+  {
+    "Gipfel": "Lienzer Spitz",
+    "lat": 47.279736336190595,
+    "lng": 9.492700008774946,
+    "Eintraege": 0,
+    "Radius": 6
+  }
+]

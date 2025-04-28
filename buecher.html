@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Verzeichnis der Gipfelbücher</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"/>
+
+  <style>
+    .tag { padding: 0.2em 0.5em; border-radius: 0.4em; font-weight: bold; display:inline-block; font-size: 0.9em; }
+    .tag-green { background: #d4edda; color: #155724; }
+    .tag-yellow { background: #fff3cd; color: #856404; }
+    .tag-red { background: #f8d7da; color: #721c24; }
+    .tag-gray { background: #e2e3e5; color: #6c757d; }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <nav>
+  <a href="index.html">Home</a>
+  <a href="eintraege.html">Einträge</a>
+  <a href="charts.html">Charts</a>
+  <a href="buecher.html" class="active">Bücher</a>
+  <a href="karte.html">Karte</a>
+</nav>
+
+    <h1>Verzeichnis der Gipfelbücher</h1>
+
+    
+<div style="background:#f4f4f4; padding:1rem; margin-bottom:2rem; border-left:5px solid #003366;">
+  <strong>Legende:</strong><br>
+  <span class="tag tag-green">☑</span> = Buch digitalisiert & Einträge statistisch erfasst<br>
+  <span class="tag tag-yellow">❒</span> = Buch (noch) nicht digitalisiert/erfasst<br>
+  <span class="tag tag-red">×</span> = Buch kann nicht erfasst werden (z.B. unleserlich/verwittert)<br>
+  <span class="tag tag-gray">?</span> = Buch nicht auffindbar, bzw. keine Rückmeldungen zu Büchern<br>
+</div>
+
+    
+<div style="margin: 1rem 0;">
+  <table id="booksTable" class="display stripe hover compact" style="width:100%">
+      <thead></thead>
+      <tfoot></tfoot>
+    </table>
+
+    <footer style="text-align:center; font-size: 0.8rem; margin-top: 3rem; color: #666;">
+      © Andreas Koller, 2025 – <a href="mailto:andreas-koller@gmx.ch">andreas-koller@gmx.ch</a>
+    </footer>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script>
+    fetch('books.json')
+      .then(res => res.json())
+      .then(data => {
+        const columns = Object.keys(data[0]).map(k => {
+          return { title: k, data: k === "Digitalisierung" ? function(row) {
+              const val = row[k];
+              const tagClass = val === "☑" ? "green" :
+                               val === "❒" ? "yellow" :
+                               val === "×" ? "red" : "gray";
+              return `<span class='tag tag-${tagClass}'>${val}</span>`;
+            } : k };
+        });
+        const table = $('#booksTable').DataTable({
+          data: data,
+          columns: columns,
+          paging: true,
+          searching: true,
+          lengthMenu: [10, 25, 50, 100],
+          language: {
+            lengthMenu: "Zeige _MENU_ Einträge",
+            zeroRecords: "Keine passenden Bücher gefunden",
+            info: "Zeige _START_ bis _END_ von _TOTAL_ Einträgen",
+            infoEmpty: "Keine verfügbaren Einträge",
+            infoFiltered: "(gefiltert von _MAX_ Einträgen)",
+            search: "Suche:",
+            paginate: {
+              first: "Erste",
+              last: "Letzte",
+              next: "Nächste",
+              previous: "Zurück"
+            }
+          },
+          initComplete: function () {
+            const api = this.api();
+            const thead = document.querySelector("#booksTable thead");
+            const filterRow = document.createElement("tr");
+
+            api.columns().every(function () {
+              const column = this;
+              const th = document.createElement("th");
+              const input = document.createElement("input");
+              input.placeholder = "Suche";
+              input.style.width = "100%";
+              input.style.fontSize = "0.8rem";
+              input.addEventListener('keyup', function () {
+                if (column.search() !== this.value) {
+                  column.search(this.value).draw();
+                }
+              });
+              th.appendChild(input);
+              filterRow.appendChild(th);
+            });
+            thead.appendChild(filterRow);
+          }
+        });
+
+        const thead = document.querySelector("#booksTable thead");
+        if (!thead.innerHTML.trim()) {
+          thead.innerHTML = "<tr>" + columns.map(col => `<th>${col.title}</th>`).join("") + "</tr>";
+        }
+
+        const footer = document.querySelector("#booksTable tfoot");
+        if (!footer.innerHTML.trim()) {
+          footer.innerHTML = "<tr>" + columns.map(() => "<th></th>").join("") + "</tr>";
+        }
+      });
+  </script>
+</body>
+</html>
