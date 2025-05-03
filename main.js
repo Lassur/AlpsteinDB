@@ -41,18 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.print();
   };
 
-  
-      const xlsxBtn = document.createElement("button");
-      xlsxBtn.textContent = "Excel Export (.xlsx)";
-      xlsxBtn.style.marginRight = "10px";
-      xlsxBtn.onclick = () => {
-        const table = document.querySelector("#gipfeltabelle");
-        const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.table_to_sheet(table);
-        XLSX.utils.book_append_sheet(wb, ws, "Gipfelbuch");
-        XLSX.writeFile(wb, "gipfelbuch_export.xlsx");
-      };
-
       buttonsWrapper.appendChild(xlsxBtn);
       buttonsWrapper.appendChild(exportBtn);
   buttonsWrapper.appendChild(printBtn);
