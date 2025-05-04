@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Interaktive Diagramme – Alpstein DB</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 0; background: #f4f4f4; color: #333; }
+    header { background: #024; color: white; padding: 1rem; }
+    nav a { color: white; margin-right: 1rem; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    main { padding: 2rem; max-width: 1000px; margin: auto; background: white; }
+    h1 { color: #024; }
+    .filter-container { margin-bottom: 1rem; }
+    .filter-container select, .filter-container button {
+      margin: 0.3rem 0.6rem 0.3rem 0;
+      padding: 0.3rem;
+      font-size: 0.9rem;
+    }
+    canvas { background: #fff; border: 1px solid #ccc; padding: 1rem; }
+    footer { background: #eee; padding: 1rem; text-align: center; margin-top: 2rem; font-size: 0.9rem; color: #555; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="eintraege.html">Einträge</a>
+      <a href="charts.html">Charts</a>
+      <a href="buecher.html">Bücher</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Interaktive Diagramme</h1>
+
+    <div class="filter-container">
+      <select id="filterGipfel"><option value="">Gipfel</option></select>
+      <select id="filterRoute"><option value="">Route</option></select>
+      <select id="filterBuch"><option value="">Buch</option></select>
+      <select id="filterBuchtyp"><option value="">Buchtyp</option></select>
+      <select id="filterErfasst"><option value="">Erfasste Jahre</option></select>
+      <select id="filterJahr"><option value="">Jahr</option></select>
+      <select id="filterMonat"><option value="">Monat</option></select>
+      <button onclick="resetFilters()">Filter zurücksetzen</button>
+    </div>
+
+    <h2>Einträge nach Jahren</h2>
+    <canvas id="jahrChart" width="900" height="450"></canvas>
+  </main>
+
+  <footer>
+    © Andreas Koller, 2025 – <a href="mailto:andreas-koller@gmx.ch">andreas-koller@gmx.ch</a>
+  </footer>
+
+  <script>
+    const chartUrl = "https://alpsteindb.onrender.com/api/chart/jahr";
+    let chart;
+
+    async function fetchChart(filterParams = {}) {
+      const qs = new URLSearchParams(filterParams).toString();
+      const res = await fetch(chartUrl + (qs ? "?" + qs : ""));
+      const data = await res.json();
+
+      const jahre = data.map(d => d._id);
+      const gruppiert = {};
+      data.forEach(d => {
+        d.werte.forEach(w => {
+          if (!gruppiert[w.status]) gruppiert[w.status] = {};
+          gruppiert[w.status][d._id] = w.count;
+        });
+      });
+
+      const datasets = Object.entries(gruppiert).map(([label, werte]) => ({
+        label,
+        data: jahre.map(j => werte[j] || 0),
+        backgroundColor: label === "Komplett" ? "#4caf50" : "#ff9800"
+      }));
+
+      const config = {
+        type: "bar",
+        data: { labels: jahre, datasets },
+        options: {
+          responsive: true,
+          scales: {
+            x: { stacked: true, title: { display: true, text: "Jahr" } },
+            y: { stacked: true, title: { display: true, text: "Anzahl Einträge" } }
+          }
+        }
+      };
+
+      if (chart) chart.destroy();
+      chart = new Chart(document.getElementById("jahrChart"), config);
+    }
+
+    async function fetchDropdowns() {
+      const res = await fetch("https://alpsteindb.onrender.com/api/eintraege");
+      const data = await res.json();
+
+      const felder = {
+        filterGipfel: "Gipfel",
+        filterRoute: "Route",
+        filterBuch: "Buch",
+        filterBuchtyp: "Buchtyp",
+        filterErfasst: "Erfasste_Jahre",
+        filterJahr: "Jahr",
+        filterMonat: "Monat"
+      };
+
+      const optionen = {};
+      for (const [id, feld] of Object.entries(felder)) {
+        optionen[id] = [...new Set(data.map(e => e[feld]).filter(v => v))].sort();
+      }
+
+      for (const [id, werte] of Object.entries(optionen)) {
+        const select = document.getElementById(id);
+        werte.forEach(wert => {
+          const opt = document.createElement("option");
+          opt.value = wert;
+          opt.textContent = wert;
+          select.appendChild(opt);
+        });
+      }
+    }
+
+    function getFilterValues() {
+      const felder = ["filterGipfel","filterRoute","filterBuch","filterBuchtyp","filterErfasst","filterJahr","filterMonat"];
+      const params = {};
+      felder.forEach(id => {
+        const val = document.getElementById(id).value;
+        if (val) {
+          const key = id.replace("filter", "").toLowerCase();
+          params[key] = val;
+        }
+      });
+      return params;
+    }
+
+    function resetFilters() {
+      document.querySelectorAll(".filter-container select").forEach(s => s.value = "");
+      fetchChart();
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      await fetchDropdowns();
+      await fetchChart();
+
+      document.querySelectorAll(".filter-container select").forEach(sel => {
+        sel.addEventListener("change", () => {
+          const filter = getFilterValues();
+          fetchChart(filter);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
