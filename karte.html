@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Karte – Gipfelbuch</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; }
+    #map { height: 90vh; width: 100%; }
+    .filter-container {
+      padding: 10px;
+      background: #f4f4f4;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .filter-container select, button {
+      padding: 5px;
+      font-size: 14px;
+    }
+    .legende {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background: white;
+      padding: 8px 12px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+      font-size: 14px;
+    }
+    .legende .eintrag {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .legende .farbe {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .legende .gruen { background: green; }
+    .legende .grau { background: gray; }
+  </style>
+</head>
+<body>
+  <div class="filter-container">
+    <label for="filterJahr">Jahr:</label>
+    <select id="filterJahr">
+      <option value="">Alle</option>
+      <!-- Jahr-Werte werden dynamisch befüllt bei Bedarf -->
+    </select>
+
+    <label for="filterBuchtyp">Buchtyp:</label>
+    <select id="filterBuchtyp">
+      <option value="">Alle</option>
+      <option value="Gipfelbuch">Gipfelbuch</option>
+      <option value="Wandbuch">Wandbuch</option>
+      <!-- weitere falls nötig -->
+    </select>
+
+    <button id="resetBtn">Filter zurücksetzen</button>
+  </div>
+
+  <div id="map"></div>
+
+  <div class="legende">
+    <div class="eintrag"><span class="farbe gruen"></span> Einträge vorhanden</div>
+    <div class="eintrag"><span class="farbe grau"></span> Keine Einträge</div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="map.js"></script>
+</body>
+</html>
