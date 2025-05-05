@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Interaktive Charts</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script defer src="charts.js"></script>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    select, button { margin: 5px; padding: 5px; }
+    #chartContainer { width: 100%; max-width: 900px; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <h1>Interaktive Charts</h1>
+
+  <div id="filterSection">
+    <label for="gipfelSelect">Gipfel (Pflicht):</label>
+    <select id="gipfelSelect" required></select>
+
+    <select id="routeSelect"><option value="">Route</option></select>
+    <select id="buchSelect"><option value="">Buch</option></select>
+    <select id="buchtypSelect"><option value="">Buchtyp</option></select>
+    <select id="erfassteJahreSelect"><option value="">Erfasste Jahre</option></select>
+    <select id="jahrSelect"><option value="">Jahr</option></select>
+    <select id="monatSelect"><option value="">Monat</option></select>
+
+    <button id="resetButton">Filter zurücksetzen</button>
+    <button id="loadChartButton">Chart laden</button>
+  </div>
+
+  <div id="chartContainer">
+    <canvas id="eintraegeChart"></canvas>
+  </div>
+</body>
+</html>
