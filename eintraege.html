@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Einträge – Alpstein DB</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 0; background: #f8f8f8; color: #333; }
+    header { background: #024; color: white; padding: 1rem; }
+    nav a { color: white; margin-right: 1rem; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    main { padding: 2rem; max-width: 95%; margin: auto; background: white; }
+    footer { background: #eee; padding: 1rem; text-align: center; margin-top: 2rem; font-size: 0.9rem; color: #555; }
+    h1 { color: #024; }
+    #gipfeltabelle td, #gipfeltabelle th {
+      font-size: 0.85rem;
+      padding: 0.25rem 0.4rem;
+    }
+    .dataTable-pagination, .dataTable-info {
+      font-size: 0.8rem;
+    }
+    select, button { margin-right: 10px; margin-bottom: 10px; }
+    #exportButtons button { margin-right: 10px; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="eintraege.html">Einträge</a>
+      <a href="charts.html">Charts</a>
+      <a href="buecher.html">Bücher</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Gipfelbuch-Einträge</h1>
+
+    <div id="filterContainer">
+      <select id="filterGipfel"></select>
+      <select id="filterRoute"></select>
+      <select id="filterBuch"></select>
+      <select id="filterJahr"></select>
+      <select id="filterErstbegehung"></select>
+      <button id="resetFilters">Filter zurücksetzen</button>
+    </div>
+
+    <div id="tabelle-wrapper"></div>
+    <p id="loading">Lade Daten...</p>
+  </main>
+
+  <footer>
+    © Andreas Koller, 2025 – <a href="mailto:andreas-koller@gmx.ch">andreas-koller@gmx.ch</a>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" defer></script>
+  <script src="main.js" defer></script>
+</body>
+</html>
