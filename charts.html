@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Interaktive Diagramme – Alpstein DB</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 0; background: #f5f5f5; color: #222; }
+    header { background: #024; color: white; padding: 1rem; }
+    nav a { color: white; margin-right: 1rem; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    main { padding: 2rem; max-width: 1000px; margin: auto; background: white; }
+    h1 { color: #024; }
+    .filter-container { margin-bottom: 1rem; }
+    .filter-container select, .filter-container button {
+      margin: 0.3rem 0.6rem 0.3rem 0;
+      padding: 0.3rem;
+      font-size: 0.9rem;
+    }
+    canvas { background: #fff; border: 1px solid #ccc; padding: 1rem; margin-top: 2rem; }
+    footer { background: #eee; padding: 1rem; text-align: center; margin-top: 2rem; font-size: 0.9rem; color: #555; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="eintraege.html">Einträge</a>
+      <a href="charts.html">Charts</a>
+      <a href="buecher.html">Bücher</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Interaktive Diagramme</h1>
+
+    <div class="filter-container">
+      <select id="filterGipfel" required><option value="">Gipfel (Pflicht)</option></select>
+      <select id="filterRoute"><option value="">Route</option></select>
+      <select id="filterBuch"><option value="">Buch</option></select>
+      <select id="filterBuchtyp"><option value="">Buchtyp</option></select>
+      <select id="filterErfasst"><option value="">Erfasste Jahre</option></select>
+      <select id="filterJahr"><option value="">Jahr</option></select>
+      <select id="filterMonat"><option value="">Monat</option></select>
+      <button onclick="resetFilters()">Filter zurücksetzen</button>
+    </div>
+
+    <h2>Einträge nach Jahren</h2>
+    <canvas id="jahrChart" width="900" height="450"></canvas>
+  </main>
+
+  <footer>
+    © Andreas Koller, 2025 – <a href="mailto:andreas-koller@gmx.ch">andreas-koller@gmx.ch</a>
+  </footer>
+
+  <script src="charts.js"></script>
+</body>
+</html>
