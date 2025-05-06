@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Karte – Alpstein DB</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 0; background: #f5f5f5; color: #222; }
+    header { background: #024; color: white; padding: 1rem; }
+    nav a { color: white; margin-right: 1rem; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    main { padding: 2rem; max-width: 1000px; margin: auto; background: white; }
+    h1 { color: #024; }
+    #map { height: 600px; width: 100%; margin-top: 1rem; }
+    footer { background: #eee; padding: 1rem; text-align: center; margin-top: 2rem; font-size: 0.9rem; color: #555; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="eintraege.html">Einträge</a>
+      <a href="charts.html">Charts</a>
+      <a href="karte.html" class="active">Karte</a>
+      <a href="buecher.html">Bücher</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Karte</h1>
+    <div id="map"></div>
+  </main>
+
+  <footer>
+    &copy; 2025 Alpstein DB – Interaktive Visualisierung der Gipfel
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const gipfel = [{"Gipfel": "Achter Kreuzberg", "Latitude": 47.23683049, "Longitude": 9.411703179}, {"Gipfel": "Alp Sigel (P.1738)", "Latitude": 47.27852908, "Longitude": 9.439358647}, {"Gipfel": "Alp Sigel (P.1768)", "Latitude": 47.27324835, "Longitude": 9.435901932}, {"Gipfel": "Altenalptürm Mittelgipfel", "Latitude": 47.27073988, "Longitude": 9.378468378}, {"Gipfel": "Altenalptürm Ostgipfel", "Latitude": 47.27160096, "Longitude": 9.380372675}, {"Gipfel": "Altenalptürm Westgipfel", "Latitude": 47.26977648, "Longitude": 9.37607055}, {"Gipfel": "Altmann", "Latitude": 47.23955855, "Longitude": 9.371543979}, {"Gipfel": "Baritschchopf", "Latitude": 47.28013154, "Longitude": 9.480185887}, {"Gipfel": "Bogartenfirst", "Latitude": 47.26673619, "Longitude": 9.426562691}, {"Gipfel": "Bogartenmannli", "Latitude": 47.26557081, "Longitude": 9.423595533}, {"Gipfel": "Bötzelchopf", "Latitude": 47.25465586, "Longitude": 9.394310853}, {"Gipfel": "Chreialpfirst", "Latitude": 47.23728495, "Longitude": 9.397579541}, {"Gipfel": "Chreialpfirst (P.2099)", "Latitude": 47.23540445, "Longitude": 9.387900334}, {"Gipfel": "Mittlere Dreifaltigkeit", "Latitude": 47.26275713, "Longitude": 9.421777865}, {"Gipfel": "Dritter Kreuzberg", "Latitude": 47.24081855, "Longitude": 9.419202211}, {"Gipfel": "Ebenalp/Äscher/Gasthauswand", "Latitude": 47.28288688, "Longitude": 9.410666776}, {"Gipfel": "Erster Kreuzberg", "Latitude": 47.24366109, "Longitude": 9.423317157}, {"Gipfel": "Erster Silberplattenkopf", "Latitude": 47.23629222, "Longitude": 9.314097145}, {"Gipfel": "Fählenschafberg", "Latitude": 47.24709938, "Longitude": 9.39167311}, {"Gipfel": "Fählenschafbergturm", "Latitude": 47.24539674, "Longitude": 9.386991196}, {"Gipfel": "Fählentürm Mittelgipfel", "Latitude": 47.24383426, "Longitude": 9.382992868}, {"Gipfel": "Fählentürm Ostgipfel", "Latitude": 47.24402795, "Longitude": 9.384081473}, {"Gipfel": "Fählentürm Westgipfel", "Latitude": 47.24315559, "Longitude": 9.38118018}, {"Gipfel": "Fähnerenspitz", "Latitude": 47.31429134, "Longitude": 9.480836126}, {"Gipfel": "Fähnligipfel", "Latitude": 47.25530356, "Longitude": 9.412952685}, {"Gipfel": "Filderkopf", "Latitude": 47.27982866, "Longitude": 9.393250036}, {"Gipfel": "Fliskopf", "Latitude": 47.24103197, "Longitude": 9.367636112}, {"Gipfel": "Föhrenkante", "Latitude": 47.26318079, "Longitude": 9.425246978}, {"Gipfel": "Forscherstein", "Latitude": 47.29028195, "Longitude": 9.429015733}, {"Gipfel": "Freiheit", "Latitude": 47.25231415, "Longitude": 9.400129925}, {"Gipfel": "Freiheitturm Östlicher", "Latitude": 47.25129791, "Longitude": 9.396268307}, {"Gipfel": "Freiheitturm Westlicher", "Latitude": 47.25027852, "Longitude": 9.394079727}, {"Gipfel": "Fünfter Kreuzberg", "Latitude": 47.23868877, "Longitude": 9.414089037}, {"Gipfel": "Fünfter Silberplattenkopf", "Latitude": 47.23919289, "Longitude": 9.3147006}, {"Gipfel": "Furgglenzahn", "Latitude": 47.25455757, "Longitude": 9.43904499}, {"Gipfel": "Gamschopf", "Latitude": 47.2305058, "Longitude": 9.304531241}, {"Gipfel": "Gätterifirst Hauptgipfel", "Latitude": 47.23167529, "Longitude": 9.400488715}, {"Gipfel": "Gätterifirst P.2046", "Latitude": 47.22830951, "Longitude": 9.395127987}, {"Gipfel": "Gätterifirst P.2050", "Latitude": 47.22641898, "Longitude": 9.390998774}, {"Gipfel": "Gätterifirst P.2085", "Latitude": 47.22948575, "Longitude": 9.397794705}, {"Gipfel": "Gir", "Latitude": 47.24440013, "Longitude": 9.33826812}, {"Gipfel": "Girenspitz", "Latitude": 47.2520825, "Longitude": 9.341233095}, {"Gipfel": "Girespitz (Wildhauser)", "Latitude": 47.2312907, "Longitude": 9.366043128}, {"Gipfel": "Glogger", "Latitude": 47.27229805, "Longitude": 9.47385589}, {"Gipfel": "Gmeinenwishöchi", "Latitude": 47.21569685, "Longitude": 9.258858853}, {"Gipfel": "Grauchopf", "Latitude": 47.24960185, "Longitude": 9.332362815}, {"Gipfel": "Grenzchopf", "Latitude": 47.24710077, "Longitude": 9.323968321}, {"Gipfel": "Grüehorn", "Latitude": 47.24333786, "Longitude": 9.318939334}, {"Gipfel": "Gulmen", "Latitude": 47.22281652, "Longitude": 9.384567663}, {"Gipfel": "Hängeten Ostgipfel", "Latitude": 47.26765307, "Longitude": 9.374275011}, {"Gipfel": "Hängeten Westgipfel", "Latitude": 47.26320669, "Longitude": 9.362657781}, {"Gipfel": "Heierli Nadel", "Latitude": 47.26851513, "Longitude": 9.467646546}, {"Gipfel": "Amboss (Hochhus)", "Latitude": 47.25070427, "Longitude": 9.437751549}, {"Gipfel": "Höchnideri", "Latitude": 47.26079467, "Longitude": 9.353576657}, {"Gipfel": "Hoher Kasten", "Latitude": 47.28369394, "Longitude": 9.485025797}, {"Gipfel": "Horst", "Latitude": 47.24791289, "Longitude": 9.373447774}, {"Gipfel": "Hühnerberg", "Latitude": 47.25902371, "Longitude": 9.348538183}, {"Gipfel": "Hundstei", "Latitude": 47.23884517, "Longitude": 9.339450569}, {"Gipfel": "Hundstein", "Latitude": 47.25246274, "Longitude": 9.402002049}, {"Gipfel": "Hüser Ostgipfel", "Latitude": 47.25657684, "Longitude": 9.447459679}, {"Gipfel": "Hüser Westgipfel", "Latitude": 47.25563136, "Longitude": 9.445643867}, {"Gipfel": "Japanischer Turm", "Latitude": 47.23790416, "Longitude": 9.314168667}, {"Gipfel": "Jöchliturm", "Latitude": 47.23233008, "Longitude": 9.357930648}, {"Gipfel": "Kalberer", "Latitude": 47.28001961, "Longitude": 9.397059049}, {"Gipfel": "Kamor", "Latitude": 47.28971524, "Longitude": 9.486704207}, {"Gipfel": "Kirchli", "Latitude": 47.25355488, "Longitude": 9.442131283}, {"Gipfel": "Kleine Hüser", "Latitude": 47.25897462, "Longitude": 9.450262253}, {"Gipfel": "Kluckerplatte", "Latitude": 47.24190632, "Longitude": 9.320217483}, {"Gipfel": "Läden", "Latitude": 47.27396853, "Longitude": 9.384723719}, {"Gipfel": "Leiterfeldturm", "Latitude": 47.26428916, "Longitude": 9.37865735}, {"Gipfel": "Lienzer Spitz", "Latitude": 47.27973634, "Longitude": 9.492700009}, {"Gipfel": "Lisengrat/Wisswand", "Latitude": 47.24415826, "Longitude": 9.354613608}, {"Gipfel": "Lütispitz", "Latitude": 47.22291907, "Longitude": 9.283318448}, {"Gipfel": "Marwees (P.1991)", "Latitude": 47.26436992, "Longitude": 9.415206197}, {"Gipfel": "Marwees (P.2055)", "Latitude": 47.26130691, "Longitude": 9.403963748}, {"Gipfel": "Moor Hauptgipfel", "Latitude": 47.2315313, "Longitude": 9.362152624}, {"Gipfel": "Mutschen", "Latitude": 47.23606151, "Longitude": 9.406343465}, {"Gipfel": "Mutteliwand", "Latitude": 47.2242139, "Longitude": 9.301192027}, {"Gipfel": "Nadlenspitz", "Latitude": 47.2479999, "Longitude": 9.395660375}, {"Gipfel": "Nädliger", "Latitude": 47.23785306, "Longitude": 9.363526816}, {"Gipfel": "Neuenalpspitz", "Latitude": 47.20766595, "Longitude": 9.251825565}, {"Gipfel": "Neuenalpturm", "Latitude": 47.28337544, "Longitude": 9.395245825}, {"Gipfel": "Neues Südplättli", "Latitude": 47.2550443, "Longitude": 9.414220073}, {"Gipfel": "Öhrli", "Latitude": 47.2654561, "Longitude": 9.360667934}, {"Gipfel": "Östliche Dreifaltigkeit", "Latitude": 47.26308498, "Longitude": 9.422358775}, {"Gipfel": "Rässegg", "Latitude": 47.2386206, "Longitude": 9.373439087}, {"Gipfel": "Roslenfirst", "Latitude": 47.24365364, "Longitude": 9.409478731}, {"Gipfel": "Rossmad Mittelgipfel", "Latitude": 47.25322836, "Longitude": 9.367554442}, {"Gipfel": "Rossmad Ostgipfel", "Latitude": 47.25656863, "Longitude": 9.374530668}, {"Gipfel": "Rot Turm", "Latitude": 47.25125198, "Longitude": 9.401441392}, {"Gipfel": "Ruchbühl", "Latitude": 47.23395546, "Longitude": 9.381973218}, {"Gipfel": "Säntis", "Latitude": 47.24938821, "Longitude": 9.343263146}, {"Gipfel": "Schafbergchöpf", "Latitude": 47.23072177, "Longitude": 9.352219358}, {"Gipfel": "Schafbergwand", "Latitude": 47.22077246, "Longitude": 9.352668514}, {"Gipfel": "Schäfler", "Latitude": 47.2760309, "Longitude": 9.390314104}, {"Gipfel": "Scherenspitzen", "Latitude": 47.22970862, "Longitude": 9.303928043}, {"Gipfel": "Scherenturm", "Latitude": 47.22967667, "Longitude": 9.303301247}, {"Gipfel": "Schofwisspitz", "Latitude": 47.2254809, "Longitude": 9.296212135}, {"Gipfel": "Schwarzchopf", "Latitude": 47.22871546, "Longitude": 9.30323719}, {"Gipfel": "Schwarzchopf (P.1798)", "Latitude": 47.21955604, "Longitude": 9.285231424}, {"Gipfel": "Sechster Kreuzberg", "Latitude": 47.23793886, "Longitude": 9.412927812}, {"Gipfel": "Sechster Silberplattenkopf", "Latitude": 47.23933322, "Longitude": 9.315138182}, {"Gipfel": "Seealpseeturm", "Latitude": 47.27051811, "Longitude": 9.396162951}, {"Gipfel": "Siebter Kreuzberg", "Latitude": 47.23723923, "Longitude": 9.411846024}, {"Gipfel": "Silberplatte", "Latitude": 47.23995669, "Longitude": 9.316067941}, {"Gipfel": "Staubernfirst", "Latitude": 47.26338179, "Longitude": 9.457796835}, {"Gipfel": "Staubernkanzel", "Latitude": 47.26029602, "Longitude": 9.452017105}, {"Gipfel": "Steckenberg", "Latitude": 47.26749876, "Longitude": 9.381663578}, {"Gipfel": "Stöllen", "Latitude": 47.22562453, "Longitude": 9.292100802}, {"Gipfel": "Stoss", "Latitude": 47.23433981, "Longitude": 9.314181833}, {"Gipfel": "Tristen", "Latitude": 47.22443434, "Longitude": 9.364082281}, {"Gipfel": "Unghüür", "Latitude": 47.22566415, "Longitude": 9.30400411}, {"Gipfel": "Vierter Kreuzberg", "Latitude": 47.23918204, "Longitude": 9.414973404}, {"Gipfel": "Vierter Silberplattenkopf", "Latitude": 47.23889736, "Longitude": 9.314666045}, {"Gipfel": "Wagenlückenspitz", "Latitude": 47.25034117, "Longitude": 9.359168595}, {"Gipfel": "Westliche Dreifaltigkeit", "Latitude": 47.26217707, "Longitude": 9.420077775}, {"Gipfel": "Widderalpstöck Hauptgipfel", "Latitude": 47.25432788, "Longitude": 9.406980083}, {"Gipfel": "Widderalpstöck Mittelgipfel", "Latitude": 47.25477305, "Longitude": 9.409412591}, {"Gipfel": "Widderalpstock (P.2131)", "Latitude": 47.25388937, "Longitude": 9.403399897}, {"Gipfel": "Wildhauser Schafberg", "Latitude": 47.22942495, "Longitude": 9.352053373}, {"Gipfel": "Zehespitz", "Latitude": 47.22244695, "Longitude": 9.356944101}, {"Gipfel": "Zisler", "Latitude": 47.2781212, "Longitude": 9.40207581}, {"Gipfel": "Zweiter Kreuzberg", "Latitude": 47.242215, "Longitude": 9.421970501}, {"Gipfel": "Zweiter Silberplattenkopf", "Latitude": 47.23718264, "Longitude": 9.313823117}];
+
+    var greenIcon = new L.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+      iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+    });
+    var grayIcon = new L.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png',
+      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+      iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+    });
+
+    const map = L.map('map').setView([47.24971177362904, 9.381761904129032], 13);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
+    }).addTo(map);
+
+    // Lade Eintragszahlen von Backend
+    fetch('https://alpsteindb.onrender.com/api/eintraege-pro-gipfel')
+      .then(res => res.json())
+      .then(data => {
+        gipfel.forEach(p => {
+          const count = data[p.Gipfel] || 0;
+          const icon = count > 0 ? greenIcon : grayIcon;
+          const marker = L.marker([p.Latitude, p.Longitude], {icon}).addTo(map);
+          marker.bindPopup(`${p.Gipfel} – ${count} Eintrag${count !== 1 ? 'e' : ''}`);
+        });
+      })
+      .catch(err => {
+        console.error('Fehler beim Laden der Daten:', err);
+      });
+  </script>
+</body>
+</html>
