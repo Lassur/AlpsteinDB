@@ -73,7 +73,7 @@ const gipfel = [{'Gipfel': 'Achter Kreuzberg', 'Latitude': 47.23683049, 'Longitu
           markerLayer.clearLayers();
           gipfel.forEach(p => {
             const count = data[p.Gipfel] || 0;
-            const radius = count > 0 ? 3 + Math.log10(count) * 10.5 : 2;
+            const radius = count > 0 ? 3 + Math.log10(count) * 8.26 : 2;
             const color = count > 0 ? "green" : "gray";
             const marker = L.circleMarker([p.Latitude, p.Longitude], {
               radius,
