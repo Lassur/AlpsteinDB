@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Karte</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 0; background: #f5f5f5; color: #222; }
+    header { background: #024; color: white; padding: 1rem; }
+    nav a { color: white; margin-right: 1rem; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    main { padding: 2rem; max-width: 1000px; margin: auto; background: white; }
+    h1 { color: #024; }
+    #map { height: 600px; width: 100%; margin-top: 1rem; }
+    footer { background: #eee; padding: 1rem; text-align: center; margin-top: 2rem; font-size: 0.9rem; color: #555; }
+    input { padding: 0.25rem; font-size: 1rem; }
+  </style>
+  
+<script>
+  function formatNumberCH(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+  }
+
+  const map = L.map('map').setView([47.27, 9.4], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
+  }).addTo(map);
+
+  const markerLayer = L.layerGroup().addTo(map);
+
+  function updateMap(fromYear, toYear) {
+    fetch(`https://alpsteindb.onrender.com/api/eintraege-pro-gipfel?von=${fromYear}&bis=${toYear}`)
+      .then(res => res.json())
+      .then(data => {
+        markerLayer.clearLayers();
+        let totalEntries = 0;
+        let countedPeaks = 0;
+        gipfel.forEach(p => {
+          const count = data[p.Gipfel] || 0;
+          totalEntries += count;
+          if (count > 0) countedPeaks++;
+          const radius = count > 0 ? 3 + Math.log10(count) * 10.5 : 2;
+          const color = count > 0 ? "green" : "gray";
+          const marker = L.circleMarker([p.Latitude, p.Longitude], {
+            radius,
+            color,
+            fillColor: color,
+            fillOpacity: 0.7,
+            weight: 1
+          }).bindPopup(`${p.Gipfel} – ${count} Eintrag${count !== 1 ? 'e' : ''}`);
+          markerLayer.addLayer(marker);
+        });
+        document.getElementById("entryCount").textContent = formatNumberCH(totalEntries);
+        document.getElementById("peakCount").textContent = formatNumberCH(countedPeaks);
+
+        fetch(`https://alpsteindb.onrender.com/api/buecher?von=${fromYear}&bis=${toYear}`)
+          .then(res => res.json())
+          .then(bookData => {
+            document.getElementById("bookCount").textContent = formatNumberCH(bookData.length);
+          })
+          .catch(err => {
+            console.error("Fehler beim Laden der Bücher:", err);
+            document.getElementById("bookCount").textContent = "?";
+          });
+      })
+      .catch(err => {
+        console.error("Fehler beim Laden der Daten:", err);
+      });
+  }
+
+  updateMap(1990, 2025);
+  document.getElementById('fromYear').addEventListener('change', () => {
+    updateMap(document.getElementById('fromYear').value, document.getElementById('toYear').value);
+  });
+  document.getElementById('toYear').addEventListener('change', () => {
+    updateMap(document.getElementById('fromYear').value, document.getElementById('toYear').value);
+  });
+</script>
+</body>
