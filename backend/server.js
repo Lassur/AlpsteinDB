@@ -203,7 +203,7 @@ app.get("/api/eintraege-pro-gipfel", async (req, res) => {
     await client.connect();
     const collection = client.db(dbName).collection(collectionName);
 
-    const vonJahr = parseInt(req.query.von) || 1900;
+    const vonJahr = parseInt(req.query.von) || 1890;
     const bisJahr = parseInt(req.query.bis) || 2100;
 
     const result = await collection.aggregate([
