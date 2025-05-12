@@ -20,7 +20,26 @@
     }
     canvas { background: #fff; border: 1px solid #ccc; padding: 1rem; margin-top: 2rem; }
     footer { background: #eee; padding: 1rem; text-align: center; margin-top: 2rem; font-size: 0.9rem; color: #555; }
-  </style>
+  
+.tooltip-text {
+  display: none;
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  width: 260px;
+  z-index: 1000;
+}
+label:hover .tooltip-text {
+  display: block;
+}
+
+</style>
 </head>
 <body>
   <header>
@@ -41,7 +60,21 @@
       <select id="filterRoute"><option value="">Route</option></select>
       <select id="filterBuch"><option value="">Buch</option></select>
       <select id="filterBuchtyp"><option value="">Buchtyp</option></select>
-	  <select id="filterErfasste_Jahre"><option value="">Erfasste_Jahre</option></select>
+	  
+<label style="display: inline-flex; align-items: center; gap: 0.4rem; position: relative;">
+  <select id="filterErfasste_Jahre"><option value="">Erfasste_Jahre</option></select>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#555" viewBox="0 0 16 16" style="cursor: help;">
+    <title>Info</title>
+    <circle cx="8" cy="8" r="8" fill="#ddd"/>
+    <text x="8" y="12" text-anchor="middle" font-size="10" fill="#333" font-family="Arial" dy="-0.3em">i</text>
+    <foreignObject x="0" y="0" width="16" height="16">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="tooltip-text">
+        "Unvollständig" = Gipfelbuch startet bzw. endet unterjährig, ohne dass ein anderes nahtlos anknüpft. Oder es sind für das entsprechende Jahr lediglich Wand-/Gratbücher vorhanden, aber kein Gipfelbuch.
+      </div>
+    </foreignObject>
+  </svg>
+</label>
+
       <select id="filterJahr"><option value="">Jahr</option></select>
       <button onclick="resetFilters()">Filter zurücksetzen</button>
     </div>
