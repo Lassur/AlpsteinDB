@@ -208,15 +208,12 @@ async function updateDropdowns(primaryFilters = {}, skipGipfel = false) {
       });
       if (werte.includes(parseInt(vonAlt))) elVon.value = vonAlt;
       if (werte.includes(parseInt(bisAlt))) elBis.value = bisAlt;
-      continue;
-    }
+      }
 
     }
 
-    if (skipGipfel && id === "filterGipfel") continue;
-    const el = document.getElementById(id);
-    if (!el) continue;
-    const filterCopy = { ...primaryFilters };
+    if (skipGipfel && id === "filterGipfel") const el = document.getElementById(id);
+    if (!el) const filterCopy = { ...primaryFilters };
     if (feldname !== "Gipfel") filterCopy.gipfel = primaryFilters.gipfel;
     const werte = await fetchDropdownWerte(feldname, filterCopy);
     const aktuellerWert = el.value;
