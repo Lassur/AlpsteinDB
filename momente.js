@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Fehler beim Laden von /api/momente/monat-notizen:", err);
   }
 
-  setInterval(() => nextSlide("today-carousel"), 8000);
-  setInterval(() => nextSlide("quote-carousel"), 9000);
-  setInterval(() => nextSlide("image-carousel"), 10000);
+  setInterval(() => nextSlide("today-carousel"), 11000);
+  setInterval(() => nextSlide("quote-carousel"), 11000);
+  setInterval(() => nextSlide("image-carousel"), 11000);
 });
