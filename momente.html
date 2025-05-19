@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<title>Momente – AlpsteinDB</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<style>
+    body { font-family: sans-serif; margin: 0; padding: 0; background: #f5f5f5; color: #222; }
+    header {
+      background: #024; color: white; padding: 1rem;
+    }
+    nav a {
+      color: white; margin-right: 1rem; text-decoration: none; font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    main {
+      padding: 2rem; max-width: 1000px; margin: auto;
+      background: white;
+    }
+    h1, h2 {
+      color: #024;
+    }
+    .carousel {
+      display: flex;
+      overflow: hidden;
+      position: relative;
+    }
+    .carousel-item {
+      min-width: 100%;
+      transition: transform 0.5s ease-in-out;
+      padding: 2rem;
+      box-sizing: border-box;
+    }
+    .controls {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .carousel-images img {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+    }
+    .quote {
+      font-style: italic;
+      font-size: 1.2rem;
+      margin: 2rem 0;
+    }
+    .label {
+      text-align: center;
+      margin-top: 0.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<header>
+<nav>
+<a href="index.html">Home</a>
+<a href="eintraege.html">Einträge</a>
+<a href="charts.html">Charts</a>
+<a href="karte.html">Karte</a>
+<a href="buecher.html">Bücher</a>
+<a class="active" href="momente.html">Momente</a>
+</nav>
+</header>
+<main><h1>Momente</h1><h2>Heute vor X Jahren</h2><div class="carousel" id="today-carousel">
+<div class="carousel-item quote">"Vor genau 5 Jahren: Nebel bis zum Gipfel – trotzdem ein unvergesslicher Tag!" – 19. Mai 2020</div>
+<div class="carousel-item quote">"19. Mai 1985 – Schnee im Mai und dennoch auf dem Gipfel." – Notiz von Hans</div>
+<div class="carousel-item quote">"Heute vor 10 Jahren: Erste Tour mit meinem Sohn. Stolz pur." – 19. Mai 2015</div>
+</div><div class="controls">
+<button onclick="prevSlide('today-carousel')">◀</button>
+<button onclick="nextSlide('today-carousel')">▶</button>
+</div><h2>Zitate des Monats</h2><div class="carousel" id="quote-carousel">
+<div class="carousel-item quote">"Der Berg ruft, und ich muss gehen." – Humorvoller Eintrag, Juli 1998</div>
+<div class="carousel-item quote">"Kein Gipfel zu hoch, wenn das Vesper schmeckt." – August 2010</div>
+<div class="carousel-item quote">"Heute das Gipfelbuch vergessen – dafür den Gipfel nicht!" – September 2023</div>
+</div><div class="controls">
+<button onclick="prevSlide('quote-carousel')">◀</button>
+<button onclick="nextSlide('quote-carousel')">▶</button>
+</div><h2>Historische &amp; aktuelle Bilder</h2><div class="carousel" id="image-carousel">
+<div class="carousel-item carousel-images">
+<img alt="Sektionstour 1930" src="images/Bild1.PNG"/>
+<div class="label">Hundstein-Freiheit, Sektionstour SAC St.Gallen, Mai 1930</div>
+</div>
+<div class="carousel-item carousel-images">
+<img alt="Kreuzberge Schönbächler" src="images/Bild2.tif"/>
+<div class="label">Kreuzberge, Robert Schönbächer, Jg. 1923</div>
+</div>
+<div class="carousel-item carousel-images">
+<img alt="Achter Kreuzberg" src="images/Bild3.jpeg"/>
+<div class="label">Achter Kreuzberg, Andi Koller, 21. Aug. 2023</div>
+</div>
+</div><div class="controls">
+<button onclick="prevSlide('image-carousel')">◀</button>
+<button onclick="nextSlide('image-carousel')">▶</button>
+</div></main>
+<footer style="background: rgba(255, 255, 255, 0.8); padding: 1rem; text-align: center; font-size: 0.9rem; color: #555;">
+    © Andreas Koller, 2025 – <a href="impressum.html" style="color:#024; text-decoration:none;">Impressum</a>
+</footer>
+<script>
+    let positions = { "quote-carousel": 0, "image-carousel": 0 };
+
+    function showSlide(id, index) {
+      const carousel = document.getElementById(id);
+      const items = carousel.querySelectorAll('.carousel-item');
+      const total = items.length;
+      index = (index + total) % total;
+      positions[id] = index;
+      carousel.style.transform = 'translateX(' + (-index * 100) + '%)';
+    }
+
+    function nextSlide(id) {
+      showSlide(id, positions[id] + 1);
+    }
+
+    function prevSlide(id) {
+      showSlide(id, positions[id] - 1);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      showSlide("quote-carousel", 0);
+      showSlide("image-carousel", 0);
+    });
+  </script>
+</body>
+</html>
