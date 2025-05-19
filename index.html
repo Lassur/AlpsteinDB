@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>AlpsteinDB</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+/* Overlay-Stil für 'Heute vor X Jahren' */
+.heute-overlay {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  max-width: 320px;
+  font-size: 0.85rem;
+  z-index: 15;
+  overflow: hidden;
+}
+.heute-overlay .carousel {
+  position: relative;
+}
+.heute-overlay .carousel-item {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+.heute-overlay .carousel-item.active {
+  position: relative;
+  opacity: 1;
+}
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: sans-serif;
+    }
+
+    header {
+      background: rgba(0, 36, 64, 0.8);
+      color: white;
+      padding: 1rem;
+      position: absolute;
+      width: 100%;
+      top: 0;
+      z-index: 10;
+    }
+
+    nav a {
+      color: white;
+      margin-right: 1rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .hero {
+      position: relative;
+      height: 100vh;
+      background: url('DreifaltigkeitWestturm.jpg') no-repeat center center/cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero-content p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero-content a.button {
+      background-color: #024;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    footer {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      z-index: 10;
+    }
+
+    footer a {
+      color: #024;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <a href="index.html" class="active">Home</a>
+      <a href="eintraege.html">Einträge</a>
+      <a href="charts.html">Charts</a>
+      <a href="karte.html">Karte</a>
+      <a href="buecher.html">Bücher</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+
+<div class="heute-overlay">
+  <h3 style="margin-top: 0;">Heute vor X Jahren</h3>
+  <div class="carousel" id="home-heute-carousel">
+    <div class="carousel-item">Lade Einträge...</div>
+  </div>
+</div>
+
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>AlpsteinDB</h1>
+      <p>Tauche ein in die Geschichte der Gipfelbücher des Alpsteins</p>
+      <a href="eintraege.html" class="button">Jetzt entdecken</a>
+    </div>
+  </div>
+
+  <footer>
+    © Andreas Koller, 2025 – <a href="impressum.html">Impressum</a>
+  </footer>
+
+
+
+
+<script>
+window.onload = async () => {
+  const container = document.getElementById("home-heute-carousel");
+  if (!container) return;
+
+  let pos = 0;
+  let items = [];
+
+  try {
+    const res = await fetch("https://alpsteindb.onrender.com/api/momente/heute");
+    const daten = await res.json();
+
+    // Gruppierung nach Notiz + Datum + Gipfel
+    const gruppiert = new Map();
+    daten.forEach(e => {
+      const key = `${e.Datum_JMT}|${e.Gipfel}|${e.Notiz}`;
+      if (!e.Notiz || !e.Notiz.trim()) return;
+
+      if (!gruppiert.has(key)) {
+        gruppiert.set(key, { ...e, Wer: [e.Wer || "Unbekannt"] });
+      } else {
+        const bestehend = gruppiert.get(key);
+        bestehend.Wer.push(e.Wer || "Unbekannt");
+      }
+    });
+
+    // Zufällige Sortierung
+    items = Array.from(gruppiert.values()).sort(() => Math.random() - 0.5);
+
+    if (items.length === 0) {
+      container.innerHTML = "<div class='carousel-item'>Keine Einträge gefunden.</div>";
+      return;
+    }
+
+    container.innerHTML = "";
+    items.forEach((e, index) => {
+      const datum = new Date(e.Datum_JMT + "T00:00:00").toLocaleDateString("de-DE", {
+        day: "numeric", month: "long", year: "numeric"
+      });
+      const div = document.createElement("div");
+      div.className = `carousel-item${index === 0 ? ' active' : ''}`;
+      div.innerHTML = `
+        📅 <em>${datum}</em><br/>
+        🏔️ <strong>${e.Gipfel || "Unbekannt"}</strong><br/>
+                <blockquote style="font-size: 0.95rem; font-style: italic; color: #fff; background: rgba(255,255,255,0.1); padding: 0.75rem; border-left: 4px solid #ccc; margin: 0.75rem 0;">„${e.Notiz}“</blockquote>
+        🧑‍🤝‍🧑 ${(Array.isArray(e.Wer) ? e.Wer.join(", ") : e.Wer || "?")}
+      `;
+      container.appendChild(div);
+    });
+
+    
+function updateSlide() {
+  const slides = container.querySelectorAll(".carousel-item");
+  slides.forEach((slide, i) => {
+    slide.classList.toggle("active", i === pos);
+  });
+}
+updateSlide();
+setInterval(() => {
+  pos = (pos + 1) % items.length;
+  updateSlide();
+}, 12000);
+
+  } catch (err) {
+    console.error("Fehler beim Laden von Heute-Einträgen:", err);
+    container.innerHTML = "<div class='carousel-item'>Fehler beim Laden.</div>";
+  }
+};
+</script>
+</body>
+
+
+</body>
+
+</html>
