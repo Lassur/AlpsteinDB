@@ -77,6 +77,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   setInterval(() => nextSlide("today-carousel"), 8000);
-  setInterval(() => nextSlide("quote-carousel"), 9000);
+  setInterval(() => nextSlide("quote-carousel"), 12000);
   setInterval(() => nextSlide("image-carousel"), 10000);
 });
