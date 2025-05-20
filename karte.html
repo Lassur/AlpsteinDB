@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Karte mit Größe & Cluster</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 0; background: #f5f5f5; color: #222; }
+    header { background: #024; color: white; padding: 1rem; }
+    nav a { color: white; margin-right: 1rem; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    main { padding: 2rem; max-width: 1000px; margin: auto; background: white; }
+    h1 { color: #024; }
+    #map { height: 600px; width: 100%; margin-top: 1rem; }
+    footer { background: #eee; padding: 1rem; text-align: center; margin-top: 2rem; font-size: 0.9rem; color: #555; }
+    footer a { color: #024; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    input { padding: 0.25rem; font-size: 1rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="eintraege.html">Einträge</a>
+      <a href="charts.html">Charts</a>
+      <a href="karte.html" class="active">Karte</a>
+      <a href="buecher.html">Bücher</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Gipfelbuch-Karte</h1>
+    <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+      <div style="flex: 1;">
+        <label for="fromYear">Von Jahr:</label>
+        <input id="fromYear" type="number" value="1990" min="1880" max="2100" style="width: 100px; margin-right: 1rem;" />
+        <label for="toYear">Bis Jahr:</label>
+        <input id="toYear" type="number" value="2025" min="1880" max="2100" style="width: 100px;" />
+      </div>
+      <div id="filterResults" style="flex: 1; text-align: center; font-size: 0.95rem;">
+        📝 <span id="entryCount">–</span> Einträge ⛰️ <span id="peakCount">–</span> Gipfel
+      </div>
+      <div style="font-size: 0.9rem; background: #f0f8ff; padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #dcdcdc">
+        <strong>Legende:</strong><br />
+        <span style="color: green; font-size: 1.6em;">&#9679;</span> Einträge vorhanden<br />
+        <span style="color: gray; font-size: 1.6em;">&#9679;</span> Keine Einträge
+      </div>
+    </div>
+
+    <div id="map"></div>
+  </main>
+
+  <footer>
+    © Andreas Koller, 2025 – <a href="impressum.html">Impressum</a>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    
+const gipfel = [
+  { Gipfel: "Altmann", Latitude: 47.23955855, Longitude: 9.371543979 },
+  { Gipfel: "Säntis", Latitude: 47.24938821, Longitude: 9.343263146 }
+  // Hier würdest du die vollständige Liste einfügen
+];
+
+
+    function formatNumberCH(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+    }
+
+    const map = L.map('map').setView([47.27, 9.4], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
+    }).addTo(map);
+
+    const markerLayer = L.layerGroup().addTo(map);
+
+    function updateMap(fromYear, toYear) {
+      fetch(`https://alpsteindb.onrender.com/api/eintraege-pro-gipfel?von=${fromYear}&bis=${toYear}`)
+        .then(res => res.json())
+        .then(data => {
+          markerLayer.clearLayers();
+          gipfel.forEach(p => {
+            const count = data[p.Gipfel] || 0;
+            const radius = count > 0 ? 3 + Math.log10(count) * 8.26 : 4;
+            const color = count > 0 ? "green" : "gray";
+            const link = `eintraege.html?gipfel=${encodeURIComponent(p.Gipfel)}&von=${fromYear}&bis=${toYear}`;
+            const popupContent = `<strong>${p.Gipfel}</strong><br><a href="${link}">${count} Eintrag${count !== 1 ? 'e' : ''}</a>`;
+
+            const marker = L.circleMarker([p.Latitude, p.Longitude], {
+              radius,
+              color,
+              fillColor: color,
+              fillOpacity: 0.7,
+              weight: 1
+            }).bindPopup(popupContent, { closeButton: true });
+            markerLayer.addLayer(marker);
+          });
+
+          const totalEntries = Object.values(data).reduce((sum, val) => sum + val, 0);
+          const countedPeaks = Object.values(data).filter(v => v > 0).length;
+          document.getElementById("entryCount").textContent = formatNumberCH(totalEntries);
+          document.getElementById("peakCount").textContent = formatNumberCH(countedPeaks);
+        })
+        .catch(err => {
+          console.error("Fehler beim Laden der Daten:", err);
+        });
+    }
+
+    const fromYear = document.getElementById('fromYear');
+    const toYear = document.getElementById('toYear');
+
+    updateMap(fromYear.value, toYear.value);
+    fromYear.addEventListener('change', () => updateMap(fromYear.value, toYear.value));
+    toYear.addEventListener('change', () => updateMap(fromYear.value, toYear.value));
+  </script>
+</body>
+</html>
