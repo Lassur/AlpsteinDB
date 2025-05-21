@@ -1,0 +1,327 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>AlpsteinDB</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+/* Overlay-Stil für 'Heute vor X Jahren' */
+.heute-overlay {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  max-width: 320px;
+  font-size: 0.85rem;
+  z-index: 15;
+  overflow: hidden;
+}
+.heute-overlay .carousel {
+  position: relative;
+}
+.heute-overlay .carousel-item {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+.heute-overlay .carousel-item.active {
+  opacity: 1;
+  position: relative;
+}
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: sans-serif;
+    }
+
+    header {
+      background: rgba(0, 36, 64, 0.8);
+      color: white;
+      padding: 1rem;
+      position: absolute;
+      width: 100%;
+      top: 0;
+      z-index: 10;
+    }
+
+    nav a {
+      color: white;
+      margin-right: 1rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .hero {
+      position: relative;
+      height: 100vh;
+      background-size: cover;
+      background-position: center;
+      transition: background-image 1s ease-in-out;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero-content p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero-content a.button {
+      background-color: #024 !important;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    footer {
+      background: rgba(255, 255, 255, 0.5);
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      z-index: 10;
+    }
+
+    footer a {
+      color: #024 !important;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+.kpi-overlay {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 5;
+}
+.kpi-box {
+  display: block;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 100px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.kpi-box:hover {
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+.kpi-number {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #024 !important;
+}
+.kpi-label {
+  font-size: 1rem;
+  color: #403f3f;
+}
+</style>
+</head>
+<body>
+<script>
+  if (!localStorage.getItem("alpstein_token")) {
+    window.location.href = "login.html";
+  }
+</script>
+
+  <header>
+    <nav>
+      <a href="index.html" class="active">Home</a>
+      <a href="eintraege.html">Einträge</a>
+      <a href="charts.html">Charts</a>
+      <a href="karte.html">Karte</a>
+      <a href="buecher.html">Bücher</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+
+<div class="kpi-overlay">
+  <a class="kpi-box" href="eintraege.html" title="Mehr zu Einträgen">
+    <div class="kpi-number">120'000+</div>
+    <div class="kpi-label">Einträge</div>
+  </a>
+  <a class="kpi-box" href="karte.html" title="Zur Karte">
+    <div class="kpi-number">43</div>
+    <div class="kpi-label">Gipfel</div>
+  </a>
+  <a class="kpi-box" href="buecher.html" title="Zu den Büchern">
+    <div class="kpi-number">117</div>
+    <div class="kpi-label">Bücher</div>
+  </a>
+  <a class="kpi-box" href="eintraege.html" title="Mehr zu Einträgen">
+    <div class="kpi-label">seit</div>
+    <div class="kpi-number">1893</div>
+  </a>
+</div>
+
+<div class="heute-overlay">
+  <h3 style="margin-top: 0;" id="heute-jahre-titel">Heute vor X Jahren</h3>
+  <div class="carousel" id="home-heute-carousel">
+    <div class="carousel-item">Lade Einträge...</div>
+  </div>
+</div>
+
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>AlpsteinDB</h1>
+      <p>Tauche ein in die Geschichte der Gipfelbücher des Alpsteins</p>
+      <a href="eintraege.html" class="button">Jetzt entdecken</a>
+    </div>
+  </div>
+
+  <footer>
+    © Andreas Koller, 2025 – <a href="impressum.html">Impressum</a>
+  </footer>
+
+<script>
+window.onload = async () => {
+  const container = document.getElementById("home-heute-carousel");
+  if (!container) return;
+
+  let pos = 0;
+  let items = [];
+
+  try {
+    const res = await fetch("https://alpsteindb.onrender.com/api/momente/heute");
+    const daten = await res.json();
+
+    const gruppiert = new Map();
+    daten.forEach(e => {
+      const key = `${e.Datum_JMT}|${e.Gipfel}|${e.Notiz}`;
+      if (!e.Notiz || !e.Notiz.trim()) return;
+
+      if (!gruppiert.has(key)) {
+        gruppiert.set(key, { ...e, Wer: [e.Wer || "Unbekannt"] });
+      } else {
+        const bestehend = gruppiert.get(key);
+        bestehend.Wer.push(e.Wer || "Unbekannt");
+      }
+    });
+
+    items = Array.from(gruppiert.values()).sort(() => Math.random() - 0.5);
+
+    if (items.length === 0) {
+      container.innerHTML = "<div class='carousel-item'>Keine Einträge gefunden.</div>";
+      return;
+    }
+
+    container.innerHTML = "";
+    items.forEach((e, index) => {
+      const datum = new Date(e.Datum_JMT + "T00:00:00").toLocaleDateString("de-DE", {
+        day: "numeric", month: "long", year: "numeric"
+      });
+      const div = document.createElement("div");
+      div.className = `carousel-item${index === 0 ? ' active' : ''}`;
+      const routeZeile = (e.Route && e.Route !== "Keine Angabe") ? `🧗 ${e.Route}<br/>` : "";
+      div.innerHTML = `
+        📅 <em>${datum}</em><br/>
+        🏔️ <strong>${e.Gipfel || "Unbekannt"}</strong><br/>
+        ${routeZeile}
+        <blockquote style="font-size: 0.95rem; font-style: italic; color: #fff; background: rgba(255, 255, 255, 0.5); padding: 0.75rem; border-left: 4px solid #ccc; margin: 0.75rem 0;">„${e.Notiz}“</blockquote>
+        🧑‍🤝‍🧑 ${(Array.isArray(e.Wer) ? e.Wer.join(", ") : e.Wer || "?")}
+      `;
+      container.appendChild(div);
+    });
+
+    function updateSlide() {
+      const slides = container.querySelectorAll(".carousel-item");
+      const title = document.getElementById("heute-jahre-titel");
+      if (title && items[pos]) {
+        const jahr = parseInt(items[pos].Datum_JMT?.substring(0, 4));
+        const aktuell = new Date().getFullYear();
+        const diff = aktuell - jahr;
+        title.textContent = `Heute vor ${diff} Jahr${diff !== 1 ? 'en' : ''}`;
+      }
+      slides.forEach((slide, i) => {
+        slide.classList.toggle("active", i === pos);
+      });
+    }
+    updateSlide();
+    setInterval(() => {
+      pos = (pos + 1) % items.length;
+      updateSlide();
+    }, 12000);
+
+  } catch (err) {
+    console.error("Fehler beim Laden von Heute-Einträgen:", err);
+    container.innerHTML = "<div class='carousel-item'>Fehler beim Laden.</div>";
+  }
+};
+</script>
+
+<script>
+const hero = document.querySelector('.hero');
+const heroImages = [
+  'DreifaltigkeitWestturm.jpg',
+  'Kreuzberge.jpg',
+  'Freiheit.jpg',
+  'AlpSigel.jpg'
+];
+let currentHero = 0;
+
+function rotateHeroBackground() {
+  currentHero = (currentHero + 1) % heroImages.length;
+  hero.style.backgroundImage = `url('${heroImages[currentHero]}')`;
+}
+
+window.addEventListener('load', () => {
+  hero.style.backgroundImage = `url('${heroImages[0]}')`;
+  setInterval(rotateHeroBackground, 12000);
+});
+</script>
+
+</body>
+</html>
