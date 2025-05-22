@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Passwort zurücksetzen – AlpsteinDB</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f0f0f0; background: url('Freiheit.jpg') no-repeat center center fixed; background-size: cover; }
+    form { max-width: 400px; margin: auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    h1 { text-align: center; color: #024; }
+    input, button { width: 100%; margin-bottom: 1rem; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
+    button { background: #024; color: white; cursor: pointer; }
+    button:hover { background: #046; }
+    .message { text-align: center; margin-top: 1rem; font-size: 0.95rem; }
+    .error { color: red; }
+    .success { color: green; }
+    .link { text-align: center; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+
+  <form id="resetForm">
+    <h1>Passwort zurücksetzen</h1>
+    <input type="email" id="email" placeholder="E-Mail-Adresse" required />
+    <button type="submit">Zurücksetzen</button>
+    <div class="message" id="message"></div>
+    <div class="link"><a href="login.html">Zurück zum Login</a></div>
+  </form>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
+    import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCufh8lycg-nO555jJv1GFqhToXsKTV-MM",
+      authDomain: "alpsteindb.firebaseapp.com",
+      projectId: "alpsteindb"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+auth.languageCode = "de";
+
+    document.getElementById("resetForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const msg = document.getElementById("message");
+      msg.textContent = "";
+
+      try {
+        await sendPasswordResetEmail(auth, email);
+        msg.textContent = "E-Mail zum Zurücksetzen wurde versendet.";
+        msg.className = "message success";
+      } catch (err) {
+        msg.textContent = "Fehler: " + err.message;
+        msg.className = "message error";
+      }
+    });
+  </script>
+
+</body>
+</html>
