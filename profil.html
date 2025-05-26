@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Account</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 0; background: #f5f5f5; color: #222; }
+    header { background: #024; color: white; padding: 1rem; position: fixed; top: 0; width: 100%; z-index: 1000; }
+    nav a { color: white; margin-right: 1rem; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    main { padding: 2rem; padding-top: 70px; max-width: 1000px; margin: auto; background: white; }
+    h1 { color: #024; }
+    #map { height: 600px; width: 100%; margin-top: 1rem; }
+    footer { background: #eee; padding: 1rem; text-align: center; margin-top: 2rem; font-size: 0.9rem; color: #555; }
+    footer a { color: #024; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    input { padding: 0.25rem; font-size: 1rem; }
+  </style>
+</head>
+<body>
+<script>
+  if (!localStorage.getItem("alpstein_token")) {
+    window.location.href = "login.html";
+  }
+
+  import { deleteUser } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-auth.js";
+
+  window.confirmDelete = async () => {
+    const confirmed = confirm("Willst du deinen Account wirklich unwiderruflich löschen?");
+    if (!confirmed) return;
+
+    try {
+      await deleteUser(auth.currentUser);
+      alert("Dein Account wurde gelöscht.");
+      localStorage.removeItem("alpstein_token");
+      window.location.href = "register.html";
+    } catch (error) {
+      alert("Fehler beim Löschen: " + error.message);
+    }
+  };
+
+  import { updatePassword } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-auth.js";
+
+  window.changePassword = async () => {
+    const newPassword = document.getElementById("newPassword").value;
+    const message = document.getElementById("pwMessage");
+
+    if (!newPassword || newPassword.length < 6) {
+      message.style.color = "red";
+      message.textContent = "Bitte gib ein gültiges Passwort mit mindestens 6 Zeichen ein.";
+      return;
+    }
+
+    const confirmChange = confirm("Willst du dein Passwort wirklich ändern?");
+    if (!confirmChange) return;
+
+    try {
+      await updatePassword(auth.currentUser, newPassword);
+      message.style.color = "green";
+      message.textContent = "Passwort erfolgreich geändert.";
+      document.getElementById("newPassword").value = "";
+    } catch (error) {
+      message.style.color = "red";
+      message.textContent = "Fehler: " + error.message;
+    }
+  };
+</script>
+
+
+<header>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="eintraege.html">Einträge</a>
+      <a href="charts.html">Charts</a>
+      <a href="karte.html">Karte</a>
+      <a href="buecher.html">Bücher</a>
+	  <a href="projekt.html">Projekt</a>
+    </nav>
+  </header>
+
+<main>
+  <h1>Mein Profil</h1>
+  <div class="profile-box" style="max-width: 500px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <div class="profile-row" style="margin-bottom: 1rem;"><strong>Name:</strong> <span id="username">...</span></div>
+    <div class="profile-row" style="margin-bottom: 1rem;"><strong>E-Mail:</strong> <span id="email">...</span></div>
+    <div class="profile-row" style="margin-bottom: 1rem;"><strong>Registriert seit:</strong> <span id="created">...</span></div>
+    <div class="profile-row"><strong>Letzter Login:</strong> <span id="lastLogin">...</span></div>
+<div class="profile-row" style="margin-top: 2rem;">
+<label for="newPassword"><strong>Neues Passwort:</strong></label>
+<input type="password" id="newPassword" placeholder="Mindestens 6 Zeichen" style="width: 100%; padding: 0.5rem; margin: 0.5rem 0;">
+<button onclick="changePassword()" style="background: #027; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Passwort ändern</button>
+<div id="pwMessage" style="text-align: center; margin-top: 0.5rem; font-size: 0.9rem;"></div>
+</div>
+
+<button onclick="confirmDelete()" style="margin-top:2rem;background: #a00; color: white; border: none; padding: 0.75rem; border-radius: 4px; cursor: pointer;">Account löschen</button>
+  </div>
+</main>
+
+<footer>
+    © Andreas Koller, 2025 – <a href="impressum.html">Impressum</a> – <a href="datenschutz.html">Datenschutz</a>
+  </footer>
+
+
+
+
+
+
+
+<!-- Profil-Menü -->
+<div id="profileMenu" style="position: fixed; top: 1rem; right: 1rem; display: none; z-index: 1000;">
+  <div style="position: relative;">
+    <button id="profileToggle" style="background: none; border: none; cursor: pointer;">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" style="pointer-events:none;">
+  <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+</svg>
+</button>
+    <div id="profileDropdown" style="display: none; position: absolute; top: 2.5rem; right: 0; background: white; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+      <a href="profil.html" style="display: block; padding: 0.75rem 1rem; text-decoration: none; color: #024;">🔍 Mein Profil</a>
+      <a href="#" id="logoutBtn" style="display: block; padding: 0.75rem 1rem; text-decoration: none; color: #024;">🚪 Logout</a>
+    </div>
+  </div>
+</div>
+
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, deleteUser, updatePassword } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCufh8lycg-nO555jJv1GFqhToXsKTV-MM",
+    authDomain: "alpsteindb.firebaseapp.com",
+    projectId: "alpsteindb"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const token = localStorage.getItem("alpstein_token");
+  const profileMenu = document.getElementById("profileMenu");
+  const dropdown = document.getElementById("profileDropdown");
+  const toggle = document.getElementById("profileToggle");
+
+  if (token) {
+    profileMenu.style.display = "block";
+  }
+
+  toggle?.addEventListener("click", () => {
+    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+  });
+
+  document.getElementById("logoutBtn")?.addEventListener("click", () => {
+    localStorage.removeItem("alpstein_token");
+    window.location.href = "login.html";
+  });
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.getElementById("username").textContent = user.displayName ?? "(kein Name)";
+      document.getElementById("email").textContent = user.email;
+      const createdDate = new Date(user.metadata.creationTime);
+      const lastLoginDate = new Date(user.metadata.lastSignInTime);
+      document.getElementById("created").textContent = createdDate.toLocaleString("de-CH");
+      document.getElementById("lastLogin").textContent = lastLoginDate.toLocaleString("de-CH");
+    } else {
+      window.location.href = "login.html";
+    }
+  });
+
+  window.confirmDelete = async () => {
+    const confirmed = confirm("Willst du deinen Account wirklich unwiderruflich löschen?");
+    if (!confirmed) return;
+
+    try {
+      await deleteUser(auth.currentUser);
+      alert("Dein Account wurde gelöscht.");
+      localStorage.removeItem("alpstein_token");
+      window.location.href = "register.html";
+    } catch (error) {
+      alert("Fehler beim Löschen: " + error.message);
+    }
+  };
+
+  window.changePassword = async () => {
+    const newPassword = document.getElementById("newPassword").value;
+    const message = document.getElementById("pwMessage");
+
+    if (!newPassword || newPassword.length < 6) {
+      message.style.color = "red";
+      message.textContent = "Bitte gib ein gültiges Passwort mit mindestens 6 Zeichen ein.";
+      return;
+    }
+
+    const confirmChange = confirm("Willst du dein Passwort wirklich ändern?");
+    if (!confirmChange) return;
+
+    try {
+      await updatePassword(auth.currentUser, newPassword);
+      message.style.color = "green";
+      message.textContent = "Passwort erfolgreich geändert.";
+      document.getElementById("newPassword").value = "";
+    } catch (error) {
+      message.style.color = "red";
+      message.textContent = "Fehler: " + error.message;
+    }
+  };
+</script>
+
+</body>
+</html>
