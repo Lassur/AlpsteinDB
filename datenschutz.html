@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Datenschutzerklärung – AlpsteinDB</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 0; background: #f8f8f8; color: #333; }
+    header { background: #024; color: white; padding: 1rem; position: fixed; top: 0; width: 100%; z-index: 1000; }
+    nav a { color: white; margin-right: 1rem; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    main { padding: 2rem; padding-top: 70px; max-width: 900px; margin: auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    footer { background: #eee; padding: 1rem; text-align: center; margin-top: 2rem; font-size: 0.9rem; color: #555; }
+    footer a { color: #024; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    h1 { color: #024; }
+  </style>
+</head>
+<body>
+<script>
+  if (!localStorage.getItem("alpstein_token")) {
+    window.location.href = "login.html";
+  }
+</script>
+  <header>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="eintraege.html">Einträge</a>
+      <a href="charts.html">Charts</a>
+      <a href="karte.html">Karte</a>
+      <a href="buecher.html">Bücher</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Datenschutzerklärung</h1>
+    <p>
+      Die Nutzung der Website AlpsteinDB ist ohne Login nicht möglich. Wenn du dich registrierst oder einloggst, werden dein Name und deine E-Mail-Adresse gespeichert. Diese Daten werden ausschließlich zur Benutzerverwaltung verwendet.
+    </p>
+    <p>
+      Die Website speichert ein sogenanntes „Token“ im LocalStorage deines Browsers, um dich nach Login zu authentifizieren. Es werden keine Tracking-Cookies eingesetzt.
+    </p>
+    <p>
+      Die Einträge in der Datenbank basieren auf historischen Gipfelbüchern. Sie enthalten Namen von Personen, wie sie in öffentlich zugänglichen Quellen vorhanden sind. Solltest du dennoch eine Anonymisierung wünschen, kannst du dies jederzeit per E-Mail an <a href="mailto:andreas-koller@gmx.ch">andreas-koller@gmx.ch</a> beantragen.
+    </p>
+    <p>
+      Es erfolgt keine Weitergabe von Nutzerdaten an Dritte.
+    </p>
+    <p>
+     Verantwortlich für den Datenschutz:<br>
+	Andreas Koller<br>
+	andreas-koller@gmx.ch
+    </p>
+    <p>
+      Stand: Mai 2025
+    </p>
+	
+  </main>
+  <footer>
+    © Andreas Koller, 2025 – <a href="impressum.html">Impressum</a> – <a href="datenschutz.html">Datenschutz</a>
+  </footer>
+
+<!-- Profil-Menü -->
+<div id="profileMenu" style="position: fixed; top: 1rem; right: 1rem; display: none; z-index: 1000;">
+  <div style="position: relative;">
+    <button id="profileToggle" style="background: none; border: none; cursor: pointer;">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" style="pointer-events:none;">
+  <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+</svg>
+</button>
+    <div id="profileDropdown" style="display: none; position: absolute; top: 2.5rem; right: 0; background: white; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+      <a href="profil.html" style="display: block; padding: 0.75rem 1rem; text-decoration: none; color: #024;">🔍 Mein Profil</a>
+      <a href="#" id="logoutBtn" style="display: block; padding: 0.75rem 1rem; text-decoration: none; color: #024;">🚪 Logout</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const token = localStorage.getItem("alpstein_token");
+  const profileMenu = document.getElementById("profileMenu");
+  const dropdown = document.getElementById("profileDropdown");
+  const toggle = document.getElementById("profileToggle");
+
+  if (token) {
+    profileMenu.style.display = "block";
+  }
+
+  toggle?.addEventListener("click", () => {
+    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+  });
+
+  document.getElementById("logoutBtn")?.addEventListener("click", () => {
+    localStorage.removeItem("alpstein_token");
+    window.location.href = "login.html";
+  });
+</script>
+</body>
+</html>
