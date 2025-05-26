@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <td>${buch["Archiv"] || ""}</td>
         <td><span class="${tagClass}">${buch["Digitalisierung"] || ""}</span></td>
         <td>${buch["Weitere Info"] || ""}</td>
-        <td>$${buch["pdf"] ? `<a href="{buch["pdf"]}" target="_blank" title="PDF öffnen">
+        <td>${buch["pdf"] ? `<a href="{buch["pdf"]}" target="_blank" title="PDF öffnen">
         <svg width="18" height="18" fill="#024" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M19 2H8a2 2 0 0 0-2 2v5h2V4h11v16H8v-5H6v5a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2Zm-6.41 10.41L9.83 9.66 8.41 11.08 11.34 14l4.95-4.95-1.41-1.41-3.29 3.29Z"/>
         </svg>
