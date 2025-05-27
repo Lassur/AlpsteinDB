@@ -145,7 +145,7 @@ async function fetchAndRenderSaisonChart(filters) {
           position: "right",
           grid: { drawOnChartArea: false },
           min: 0,
-          max: 30,
+          max: 25,
           ticks: {
             callback: function(value) {
               return value + "%";
