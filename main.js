@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function fetchData() {
     showLoadingSpinner();
     const params = getFilterParams();
-    params.append("limit", "50000");
+    params.append("limit", "5000");
     const url = `${apiUrl}/eintraege?${params.toString()}`;
 
     const token = localStorage.getItem("alpstein_token");
