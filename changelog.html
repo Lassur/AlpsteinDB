@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Änderungen – AlpsteinDB</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 0; background: #f8f8f8; color: #333; }
+    header { background: #024; color: white; padding: 1rem; position: fixed; top: 0; width: 100%; z-index: 1000; }
+    nav a { color: white; margin-right: 1rem; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    main { padding: 2rem; padding-top: 70px; max-width: 900px; margin: auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h1 { color: #024; }
+    h2 { margin-top: 2rem; color: #024; }
+    ul { margin-left: 1.5rem; }
+    footer { background: #eee; padding: 1rem; text-align: center; margin-top: 2rem; font-size: 0.9rem; color: #555; }
+    footer a { color: #024; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+<script>
+  if (!localStorage.getItem("alpstein_token")) {
+    window.location.href = "login.html";
+  }
+</script>
+  <header>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="eintraege.html">Einträge</a>
+      <a href="charts.html">Charts</a>
+      <a href="karte.html">Karte</a>
+      <a href="buecher.html">Bücher</a>
+      <a href="projekt.html">Projekt</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Änderungsverlauf (Change Log)</h1>
+
+    <section>
+      <h2>31. Mai 2025</h2>
+      <ul>
+        <li>🆕 Neues Buch hinzugefügt: <strong>Altmann Nordwandbuch (1997–2010)</strong></li>
+        <li>🐞 Bugfix: PDF-Filter funktioniert jetzt korrekt</li>
+        <li>✨ Feature: „Heute vor X Jahren“ zeigt jetzt auch Routen</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>10. Mai 2025</h2>
+      <ul>
+        <li>🆕 Buch <strong>Hundstein</strong> vollständig transkribiert</li>
+        <li>🔧 Tooltip bei Charts verbessert (hover zeigt jetzt mehr Details)</li>
+      </ul>
+    </section>
+
+    <!-- Weitere Einträge folgen hier -->
+
+  </main>
+
+  <footer>
+    © Andreas Koller, 2025 – <a href="impressum.html">Impressum</a> – <a href="datenschutz.html">Datenschutz</a> – <a href="changelog.html">Änderungen</a>
+  </footer>
+</body>
+</html>
