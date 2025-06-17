@@ -86,7 +86,7 @@ app.get("/api/eintraege", firebaseAuthMiddleware, async (req, res) => {
     }
 
 
-    const limit = Object.keys(req.query).length > 0 ? 10000 : 100;
+    const limit = Object.keys(req.query).length > 0 ? 1000 : 100;
     const result = await collection.find(filter).limit(limit).toArray();
     res.json(result);
   } catch (err) {
