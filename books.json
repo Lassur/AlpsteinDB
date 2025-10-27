@@ -1309,7 +1309,7 @@
   },
   {
     "ID": 110,
-    "Gipfel": "Girespitz (Wildhauser)",
+    "Gipfel": "Girespitz (P.2252)",
     "Buchtyp": "Gipfelbuch",
     "Erster Eintrag": "?",
     "Letzter Eintrag": "2013-??-??",
@@ -1321,7 +1321,7 @@
   },
   {
     "ID": 111,
-    "Gipfel": "Girespitz (Wildhauser)",
+    "Gipfel": "Girespitz (P.2252)",
     "Buchtyp": "Gipfelbuch",
     "Erster Eintrag": "2013-08-04",
     "Letzter Eintrag": "?",
@@ -2626,5 +2626,29 @@
     "Digitalisierung": "Erfasst",
     "Weitere Info": "Deponiert von Walter Harzenetter und Leo Zgraggen",
     "pdf": "https://archive.org/details/gipfelbuch-filderkopf-2006-2013"
+  },
+          {
+    "ID": 220,
+    "Gipfel": "Girenspitz (P.2446)",
+    "Buchtyp": "Gipfelbuch",
+    "Erster Eintrag": "2018-09-09",
+    "Letzter Eintrag": "2020-09-17",
+    "Seiten / Zustand": "? / ?",
+    "Archiv": "Sandra Wenzel, Herisau",
+    "Digitalisierung": "Nicht erfasst",
+    "Weitere Info": "Dürfte das erste Gipfelbuch auf dem Girenspitz gewesen sein.",
+    "pdf": ""
+  },
+            {
+    "ID": 221,
+    "Gipfel": "Girenspitz (P.2446)",
+    "Buchtyp": "Gipfelbuch",
+    "Erster Eintrag": "2020-09-17",
+    "Letzter Eintrag": "2022-10-??",
+    "Seiten / Zustand": "? / ?",
+    "Archiv": "Sandra Wenzel, Herisau",
+    "Digitalisierung": "Nicht erfasst",
+    "Weitere Info": "",
+    "pdf": ""
   }
 ]
