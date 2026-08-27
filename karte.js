@@ -14,7 +14,7 @@ const gipfel = [
   { "Gipfel": "Chreialpfirst (P.2099)", "Latitude": 47.23540445, "Longitude": 9.387900334 },
   { "Gipfel": "Mittlere Dreifaltigkeit", "Latitude": 47.26275713, "Longitude": 9.421777865 },
   { "Gipfel": "Dritter Kreuzberg", "Latitude": 47.24081855, "Longitude": 9.419202211 },
-  { "Gipfel": "Ebenalp/Äscher/Gasthauswand", "Latitude": 47.28288688, "Longitude": 9.410666776 },
+  { "Gipfel": "Ebenalp/Äscher", "Latitude": 47.28288688, "Longitude": 9.410666776 },
   { "Gipfel": "Erster Kreuzberg", "Latitude": 47.24366109, "Longitude": 9.423317157 },
   { "Gipfel": "Erster Silberplattenkopf", "Latitude": 47.23629222, "Longitude": 9.314097145 },
   { "Gipfel": "Fählenschafberg", "Latitude": 47.24709938, "Longitude": 9.39167311 },
